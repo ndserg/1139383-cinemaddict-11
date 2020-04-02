@@ -284,38 +284,37 @@ render(siteMainElement, createSiteMenuTemplate(), `beforeend`);
 render(siteMainElement, createFilterTemplate(), `beforeend`);
 render(siteMainElement, createFilmsElementsTemplate(), `beforeend`);
 
-
 // Рэндеринг блока списков и карточек фильмов
-const createFilmsElements = document.querySelector(`.films`);
+const createFilmsElement = document.querySelector(`.films`);
 
-render(createFilmsElements, createFilmsListTemplate(), `beforeend`);
+render(createFilmsElement, createFilmsListTemplate(), `beforeend`);
 
 // Рэндеринг карточек фильмов
-const createFilmsBlock = createFilmsElements.querySelector(`.films-list`);
-const createFilmsBlockContainer = createFilmsBlock.querySelector(`.films-list__container`);
+const createFilmsBlockElement = createFilmsElement.querySelector(`.films-list`);
+const createFilmsBlockContainerElement = createFilmsBlockElement.querySelector(`.films-list__container`);
 
 for (let i = 0; i < FILM_CARDS_COUNT; i++) {
-  render(createFilmsBlockContainer, createFilmCardTemplate(), `beforeend`);
+  render(createFilmsBlockContainerElement, createFilmCardTemplate(), `beforeend`);
 }
 
-render(createFilmsBlock, createCardsButtonShowMoreTemplate(), `beforeend`);
+render(createFilmsBlockElement, createCardsButtonShowMoreTemplate(), `beforeend`);
 
 // Рендеринг "Top Rated" и "Most commented" карточек фильмов
-render(createFilmsElements, createFilmsExtraBlockTemplate(`Top rated`), `beforeend`);
-render(createFilmsElements, createFilmsExtraBlockTemplate(`Most commented`), `beforeend`);
+render(createFilmsElement, createFilmsExtraBlockTemplate(`Top rated`), `beforeend`);
+render(createFilmsElement, createFilmsExtraBlockTemplate(`Most commented`), `beforeend`);
 
-const createFilmsExtraBlock = createFilmsElements.querySelectorAll(`.films-list--extra`);
+const createFilmsExtraBlockElements = createFilmsElement.querySelectorAll(`.films-list--extra`);
 
-createFilmsExtraBlock.forEach((element) => {
-  const createFilmsExtraBlockContainer = element.querySelector(`.films-list__container`);
+createFilmsExtraBlockElements.forEach((element) => {
+  const createFilmsExtraBlockContainerElement = element.querySelector(`.films-list__container`);
   for (let i = 0; i < EXTRA_FILM_CARDS_COUNT; i++) {
-    render(createFilmsExtraBlockContainer, createFilmCardTemplate(), `beforeend`);
+    render(createFilmsExtraBlockContainerElement, createFilmCardTemplate(), `beforeend`);
   }
 });
 
 // Рендеринг Подробная информация о фильме (попап)
 render(siteBodyElement, createFilmInfoPopupTemplate(), `beforeend`);
 
-const createFilmsDetails = document.querySelector(`.film-details`);
+const createFilmsDetailsElement = document.querySelector(`.film-details`);
 
-createFilmsDetails.setAttribute(`style`, `position: static`);
+createFilmsDetailsElement.setAttribute(`style`, `position: static`);
