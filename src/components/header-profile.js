@@ -1,28 +1,32 @@
 // Шаблон Звания пользователя
 import {getRandomIntegerNumber} from "../utils.js";
+import {PROFILE_RATING_VALUES} from "../const.js";
 
 export const createHeaderProfileTemplate = () => {
   const profileRatings = [`novice`, `fan`, `movie buff`];
   const profileRatingCounter = getRandomIntegerNumber(0, 30);
-  let profileRating = 0;
 
-  switch (true) {
-    case (profileRatingCounter === 0):
-      profileRating = ``;
-      break;
+  const getProfileRating = (rating) => {
+    switch (rating) {
 
-    case (profileRatingCounter < 11):
-      profileRating = profileRatings[0];
-      break;
+      case PROFILE_RATING_VALUES[0]:
+        return ``;
 
-    case (profileRatingCounter < 21):
-      profileRating = profileRatings[1];
-      break;
+      case rating <= PROFILE_RATING_VALUES[1] ? rating : true:
+        return profileRatings[0];
 
-    case (profileRatingCounter > 20):
-      profileRating = profileRatings[2];
-      break;
-  }
+      case rating <= PROFILE_RATING_VALUES[2] ? rating : true:
+        return profileRatings[1];
+
+      case rating > PROFILE_RATING_VALUES[2] ? rating : true:
+        return profileRatings[2];
+
+      default:
+        return ``;
+    }
+  };
+
+  const profileRating = getProfileRating(profileRatingCounter);
 
   return (
     `<section class="header__profile profile">

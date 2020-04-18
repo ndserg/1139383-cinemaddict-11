@@ -1,9 +1,22 @@
 // Шаблон Карточки Фильма
-export const createFilmCardTemplate = (film) => {
-  const {name, rating, releaseDate, duration, genre, poster, description, commentsCount} = film;
-  const year = releaseDate.substr(releaseDate.length - 4);
+const prepareDescription = (description) => {
   const DESCRIPTION_LENGTH = 139;
-  const descriptionText = description.length <= DESCRIPTION_LENGTH ? description : description.substr(0, DESCRIPTION_LENGTH) + ` ...`;
+  return description.length <= DESCRIPTION_LENGTH ? description : description.substr(0, DESCRIPTION_LENGTH) + ` ...`;
+};
+
+export const createFilmCardTemplate = (film) => {
+  const {
+    name,
+    rating,
+    releaseDate,
+    duration,
+    genre,
+    poster,
+    description,
+    commentsCount
+  } = film;
+  const year = releaseDate.substr(releaseDate.length - 4);
+  const descriptionText = prepareDescription(description);
 
   return (
     `<article class="film-card">

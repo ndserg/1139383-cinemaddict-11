@@ -1,19 +1,21 @@
 // Шаблон блока "Top rated" и "Most commented" карточек фильмов
 export const createFilmsExtraBlockTemplate = (blockName) => {
-  let topClass = ``;
 
-  switch (true) {
-    case (blockName === `Top rated`):
-      topClass = `films-list--top_rated`;
-      break;
+  const getTopClass = (name) => {
+    switch (name) {
 
-    case (blockName === `Most commented`):
-      topClass = `films-list--most_commented`;
-      break;
-    default:
-      topClass = ``;
-      break;
-  }
+      case `Top rated`:
+        return `films-list--top_rated`;
+
+      case `Most commented`:
+        return `films-list--most_commented`;
+
+      default:
+        return ``;
+    }
+  };
+
+  const topClass = getTopClass(blockName);
 
   return (
     `<section class="films-list--extra ${topClass}">

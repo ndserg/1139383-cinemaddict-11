@@ -1,5 +1,5 @@
 // Шаблон Подробная информация о фильме (попап)
-const createGenresMarkup = (genre) => {
+const createGenresTemplate = (genre) => {
 
   return (
     ` <span class="film-details__genre">${genre}</span>`
@@ -7,8 +7,20 @@ const createGenresMarkup = (genre) => {
 };
 
 export const createFilmInfoPopupTemplate = (film) => {
-  const {name, poster, rating, age, director, writers, actors, releaseDate, duration, country, genre, description} = film;
-  const genresMarkup = genre.map((it) => createGenresMarkup(it)).join(`\n`);
+  const {name,
+    poster,
+    rating,
+    age,
+    director,
+    writers,
+    actors,
+    releaseDate,
+    duration,
+    country,
+    genre,
+    description
+  } = film;
+  const genresTemplate = genre.map((it) => createGenresTemplate(it)).join(`\n`);
 
   return (
     `<section class="film-details">
@@ -64,7 +76,7 @@ export const createFilmInfoPopupTemplate = (film) => {
                 <tr class="film-details__row">
                   <td class="film-details__term">${genre.length > 1 ? `Genres` : `Genre`}</td>
                   <td class="film-details__cell">
-                    ${genresMarkup}
+                    ${genresTemplate}
                   </td>
                 </tr>
               </table>

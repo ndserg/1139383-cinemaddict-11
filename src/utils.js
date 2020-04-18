@@ -1,17 +1,14 @@
 import {MONTHS} from "./const.js";
 
-
 // Генератор случайного числа
 const getRandomNumber = (min, max) => {
   return (min + (Math.random() * (max - min))).toFixed(1);
 };
 
-
 // Генератор случайного целого числа
 const getRandomIntegerNumber = (min, max) => {
   return min + Math.floor(Math.random() * (max - min));
 };
-
 
 // Генератор случайного элемента массива
 const getRandomArrayItem = (array) => {

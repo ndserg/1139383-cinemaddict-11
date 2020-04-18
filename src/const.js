@@ -91,4 +91,17 @@ Sed sed nisi sed augue convallis suscipit in sed felis.
 Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. 
 In rutrum ac purus sit amet tempus.`;
 
-export {MONTHS, COMMENT_EMOJIS, COMMENT_TEXTS, COMMENT_AUTHORS, FILM_NAMES, FILM_POSTERS, FILM_GENRES, COUNTRYES, PEOPLES, DESCRIPTION_TEXT};
+const PROFILE_RATING_VALUES = [0, 10, 20];
+
+export {MONTHS,
+  COMMENT_EMOJIS,
+  COMMENT_TEXTS,
+  COMMENT_AUTHORS,
+  FILM_NAMES,
+  FILM_POSTERS,
+  FILM_GENRES,
+  COUNTRYES,
+  PEOPLES,
+  DESCRIPTION_TEXT,
+  PROFILE_RATING_VALUES
+};

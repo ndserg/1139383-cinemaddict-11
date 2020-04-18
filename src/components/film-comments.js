@@ -1,5 +1,5 @@
 // Шаблон Комментарии к фильму (попап)
-const createCommentsMarkup = (comment) => {
+const createCommentsTemplate = (comment) => {
   const {emoji, text, author, date} = comment;
 
   return (
@@ -20,7 +20,7 @@ const createCommentsMarkup = (comment) => {
 };
 
 export const createFilmCommentsPopupTemplate = (comments) => {
-  const commentsMarkup = comments.map((it) => createCommentsMarkup(it)).join(`\n`);
+  const commentsTemplate = comments.map((it) => createCommentsTemplate(it)).join(`\n`);
 
   return (
     `<div class="form-details__bottom-container">
@@ -28,7 +28,7 @@ export const createFilmCommentsPopupTemplate = (comments) => {
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
         <ul class="film-details__comments-list">
-          ${commentsMarkup}
+          ${commentsTemplate}
         </ul>
 
         <div class="film-details__new-comment">
