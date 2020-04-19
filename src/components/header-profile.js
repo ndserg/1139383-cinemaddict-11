@@ -9,13 +9,10 @@ export const createHeaderProfileTemplate = () => {
   const getProfileRating = (rating) => {
     switch (rating) {
 
-      case PROFILE_RATING_VALUES[0]:
-        return ``;
-
-      case rating <= PROFILE_RATING_VALUES[1] ? rating : true:
+      case (rating !== 0) && (rating <= PROFILE_RATING_VALUES[1]) ? rating : true:
         return profileRatings[0];
 
-      case rating <= PROFILE_RATING_VALUES[2] ? rating : true:
+      case (rating > PROFILE_RATING_VALUES[1]) && (rating <= PROFILE_RATING_VALUES[2]) ? rating : true:
         return profileRatings[1];
 
       case rating > PROFILE_RATING_VALUES[2] ? rating : true:
