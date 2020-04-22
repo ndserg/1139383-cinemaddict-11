@@ -1,5 +1,7 @@
+import {createElement} from "../utils.js";
+
 // Шаблон Меню
-export const createSiteMenuTemplate = (counter) => {
+const createSiteMenuTemplate = (counter) => {
   const {watchlist, history, favorite} = counter;
 
   return (
@@ -14,3 +16,28 @@ export const createSiteMenuTemplate = (counter) => {
     </nav>`
   );
 };
+
+export default class SiteMenu {
+  constructor(filterCounter) {
+    this._filterCounter = filterCounter;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+
+    return createSiteMenuTemplate(this._filterCounter);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

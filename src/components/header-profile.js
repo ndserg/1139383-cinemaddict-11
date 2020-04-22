@@ -1,8 +1,8 @@
 // Шаблон Звания пользователя
-import {getRandomIntegerNumber} from "../utils.js";
+import {createElement, getRandomIntegerNumber} from "../utils.js";
 import {PROFILE_RATING_VALUES} from "../const.js";
 
-export const createHeaderProfileTemplate = () => {
+const createHeaderProfileTemplate = () => {
   const profileRatings = [`novice`, `fan`, `movie buff`];
   const profileRatingCounter = getRandomIntegerNumber(0, 30);
 
@@ -32,3 +32,25 @@ export const createHeaderProfileTemplate = () => {
     </section>`
   );
 };
+
+export default class HeaderProfile {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createHeaderProfileTemplate();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

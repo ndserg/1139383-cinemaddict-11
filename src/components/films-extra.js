@@ -1,5 +1,7 @@
 // Шаблон блока "Top rated" и "Most commented" карточек фильмов
-export const createFilmsExtraBlockTemplate = (blockName) => {
+import {createElement} from "../utils.js";
+
+const createFilmsExtraBlockTemplate = (blockName) => {
 
   const getTopClass = (name) => {
     switch (name) {
@@ -24,3 +26,26 @@ export const createFilmsExtraBlockTemplate = (blockName) => {
     </section>`
   );
 };
+
+export default class FilmsExtraBlock {
+  constructor(className) {
+    this._className = className.toString();
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmsExtraBlockTemplate(this._className);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

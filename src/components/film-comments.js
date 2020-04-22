@@ -1,4 +1,6 @@
 // Шаблон Комментарии к фильму (попап)
+import {createElement} from "../utils.js";
+
 const createCommentsTemplate = (comment) => {
   const {emoji, text, author, date} = comment;
 
@@ -19,7 +21,7 @@ const createCommentsTemplate = (comment) => {
   );
 };
 
-export const createFilmCommentsPopupTemplate = (comments) => {
+const createFilmCommentsPopupTemplate = (comments) => {
   const commentsTemplate = comments.map((it) => createCommentsTemplate(it)).join(`\n`);
 
   return (
@@ -64,3 +66,27 @@ export const createFilmCommentsPopupTemplate = (comments) => {
     </div>`
   );
 };
+
+export default class FilmCommentsPopup {
+  constructor(comments) {
+    this._comments = comments;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmCommentsPopupTemplate(this._comments);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

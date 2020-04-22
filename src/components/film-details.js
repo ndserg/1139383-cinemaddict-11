@@ -1,4 +1,6 @@
 // Шаблон Подробная информация о фильме (попап)
+import {createElement} from "../utils.js";
+
 const createGenresTemplate = (genre) => {
 
   return (
@@ -6,7 +8,7 @@ const createGenresTemplate = (genre) => {
   );
 };
 
-export const createFilmInfoPopupTemplate = (film) => {
+const createFilmInfoPopupTemplate = (film) => {
   const {name,
     poster,
     rating,
@@ -102,3 +104,27 @@ export const createFilmInfoPopupTemplate = (film) => {
     </section>`
   );
 };
+
+export default class FilmInfoPopup {
+  constructor(film) {
+    this._film = film;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmInfoPopupTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

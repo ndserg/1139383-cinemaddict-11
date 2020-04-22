@@ -1,10 +1,12 @@
 // Шаблон Карточки Фильма
+import {createElement} from "../utils.js";
+
 const prepareDescription = (description) => {
   const DESCRIPTION_LENGTH = 139;
   return description.length <= DESCRIPTION_LENGTH ? description : description.substr(0, DESCRIPTION_LENGTH) + ` ...`;
 };
 
-export const createFilmCardTemplate = (film) => {
+const createFilmCardTemplate = (film) => {
   const {
     name,
     rating,
@@ -38,3 +40,27 @@ export const createFilmCardTemplate = (film) => {
     </article>`
   );
 };
+
+export default class FilmCard {
+  constructor(film) {
+    this._film = film;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmCardTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
