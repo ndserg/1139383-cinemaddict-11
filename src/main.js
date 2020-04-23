@@ -2,6 +2,7 @@ import HeaderProfileComponent from "./components/header-profile.js";
 import SiteMenuComponent from "./components/site-menu.js";
 import FilterComponent from "./components/filter.js";
 import FilmsElementsComponent from "./components/films-block.js";
+import NoFilmsComponent from "./components/no-films.js";
 import FilmsListComponent from "./components/films-list.js";
 import FilmCardComponent from "./components/film-card.js";
 import FilmsExtraBlockComponent from "./components/films-extra.js";
@@ -90,6 +91,12 @@ render(siteHeaderElement, headerProfileComponent.getElement(), RenderPosition.BE
 render(siteMainElement, siteMenuComponent.getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, filterComponent.getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, filmsElementsComponent.getElement(), RenderPosition.BEFOREEND);
+
+// Вывод сообщения об отсутствии фильмов
+if (films.length === 0) {
+  filmsListComponent.getElement().querySelector(`h2`).remove();
+  render(filmsListComponent.getElement(), new NoFilmsComponent().getElement(), RenderPosition.AFTERBEGIN);
+}
 
 // Рэндеринг блока списков и карточек фильмов
 render(filmsElementsComponent.getElement(), filmsListComponent.getElement(), RenderPosition.BEFOREEND);
