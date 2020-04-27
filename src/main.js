@@ -94,7 +94,7 @@ render(siteMainElement, filmsElementsComponent.getElement(), RenderPosition.BEFO
 
 // Вывод сообщения об отсутствии фильмов
 if (films.length === 0) {
-  filmsListComponent.getElement().querySelector(`h2`).remove();
+  filmsListComponent.getElement().querySelector(`.films-list__title`).remove();
   render(filmsListComponent.getElement(), new NoFilmsComponent().getElement(), RenderPosition.AFTERBEGIN);
 }
 
