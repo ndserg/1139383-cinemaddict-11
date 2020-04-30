@@ -1,5 +1,5 @@
 // Шаблон Кнопки "Показать Больше"
-import {createElement} from "../utils.js";
+import AbstractComponent from "./abstract-component.js";
 
 const createCardsButtonShowMoreTemplate = () => {
   return (
@@ -7,24 +7,12 @@ const createCardsButtonShowMoreTemplate = () => {
   );
 };
 
-export default class CardsButtonShowMore {
-  constructor() {
-    this._element = null;
-  }
-
+export default class CardsButtonShowMore extends AbstractComponent {
   getTemplate() {
     return createCardsButtonShowMoreTemplate();
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setClickHandler(handler) {
+    this.getElement().addEventListener(`click`, handler);
   }
 }
