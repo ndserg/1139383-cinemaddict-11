@@ -7,7 +7,7 @@ import {generateFilms} from "./mock/film.js";
 import {render, RenderPosition} from "./utils/render.js";
 import FilmsController from "./controllers/films-controller.js";
 
-const FILM_CARDS_COUNT = 0;
+const FILM_CARDS_COUNT = 20;
 
 const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = document.querySelector(`.header`);

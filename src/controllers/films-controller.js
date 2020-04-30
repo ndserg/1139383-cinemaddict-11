@@ -20,7 +20,7 @@ const siteBodyElement = document.querySelector(`body`);
 const renderFilmCard = (filmsContainerElement, film) => {
 
   const removePopup = () => {
-    filmInfoPopupComponent.removePopupButtonCloseHandler(onButtonPopupClose);
+    filmInfoPopupComponent.removeElement(onButtonPopupClose);
     removePopupElement(siteBodyElement, filmInfoPopupComponent, filmPopupCommentComponent);
   };
 

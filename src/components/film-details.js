@@ -121,7 +121,7 @@ export default class FilmInfoPopup extends AbstractComponent {
     this._PopupButtonClose.addEventListener(`click`, handler);
   }
 
-  removePopupButtonCloseHandler(handler) {
+  removeElement(handler) {
     this._PopupButtonClose.addEventListener(`click`, handler);
   }
 }
