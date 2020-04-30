@@ -1,5 +1,5 @@
 // Шаблон Карточки Фильма
-import {createElement} from "../utils.js";
+import AbstractComponent from "./abstract-component.js";
 
 const prepareDescription = (description) => {
   const DESCRIPTION_LENGTH = 139;
@@ -41,26 +41,18 @@ const createFilmCardTemplate = (film) => {
   );
 };
 
-export default class FilmCard {
+export default class FilmCard extends AbstractComponent {
   constructor(film) {
-    this._film = film;
+    super();
 
-    this._element = null;
+    this._film = film;
   }
 
   getTemplate() {
     return createFilmCardTemplate(this._film);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setDetailClickHandler(handler) {
+    this.getElement().addEventListener(`click`, handler);
   }
 }

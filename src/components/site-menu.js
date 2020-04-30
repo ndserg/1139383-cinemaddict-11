@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractComponent from "./abstract-component.js";
 
 // Шаблон Меню
 const createSiteMenuTemplate = (counter) => {
@@ -17,27 +17,14 @@ const createSiteMenuTemplate = (counter) => {
   );
 };
 
-export default class SiteMenu {
+export default class SiteMenu extends AbstractComponent {
   constructor(filterCounter) {
-    this._filterCounter = filterCounter;
+    super();
 
-    this._element = null;
+    this._filterCounter = filterCounter;
   }
 
   getTemplate() {
-
     return createSiteMenuTemplate(this._filterCounter);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

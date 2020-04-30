@@ -1,5 +1,5 @@
 // Шаблон Подробная информация о фильме (попап)
-import {createElement} from "../utils.js";
+import AbstractComponent from "./abstract-component.js";
 
 const createGenresTemplate = (genre) => {
 
@@ -105,26 +105,23 @@ const createFilmInfoPopupTemplate = (film) => {
   );
 };
 
-export default class FilmInfoPopup {
+export default class FilmInfoPopup extends AbstractComponent {
   constructor(film) {
-    this._film = film;
+    super();
 
-    this._element = null;
+    this._film = film;
+    this._PopupButtonClose = this.getElement().querySelector(`.film-details__close-btn`);
   }
 
   getTemplate() {
     return createFilmInfoPopupTemplate(this._film);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  setPopupButtonCloseHandler(handler) {
+    this._PopupButtonClose.addEventListener(`click`, handler);
   }
 
-  removeElement() {
-    this._element = null;
+  removePopupButtonCloseHandler(handler) {
+    this._PopupButtonClose.addEventListener(`click`, handler);
   }
 }

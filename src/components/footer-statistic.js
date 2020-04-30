@@ -1,5 +1,5 @@
 // Количество фильмов в базе (футер сайта)
-import {createElement} from "../utils.js";
+import AbstractComponent from "./abstract-component.js";
 
 const createFooterStatisticTemplate = (counter) => {
 
@@ -8,26 +8,14 @@ const createFooterStatisticTemplate = (counter) => {
   );
 };
 
-export default class FooterStatistic {
+export default class FooterStatistic extends AbstractComponent {
   constructor(counter) {
-    this._counter = counter;
+    super();
 
-    this._element = null;
+    this._counter = counter;
   }
 
   getTemplate() {
     return createFooterStatisticTemplate(this._counter);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

@@ -1,5 +1,5 @@
 // Шаблон Блока Списков карточек фильмов
-import {createElement} from "../utils.js";
+import AbstractComponent from "./abstract-component.js";
 
 export const createFilmsElementsTemplate = () => {
   return (
@@ -7,24 +7,8 @@ export const createFilmsElementsTemplate = () => {
   );
 };
 
-export default class FilmsElements {
-  constructor() {
-    this._element = null;
-  }
-
+export default class FilmsBlock extends AbstractComponent {
   getTemplate() {
     return createFilmsElementsTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

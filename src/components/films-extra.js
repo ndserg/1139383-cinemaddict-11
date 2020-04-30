@@ -1,5 +1,5 @@
 // Шаблон блока "Top rated" и "Most commented" карточек фильмов
-import {createElement} from "../utils.js";
+import AbstractComponent from "./abstract-component.js";
 
 const createFilmsExtraBlockTemplate = (blockName) => {
 
@@ -27,25 +27,14 @@ const createFilmsExtraBlockTemplate = (blockName) => {
   );
 };
 
-export default class FilmsExtraBlock {
+export default class FilmsExtraBlock extends AbstractComponent {
   constructor(className) {
+    super();
+
     this._className = className.toString();
-    this._element = null;
   }
 
   getTemplate() {
     return createFilmsExtraBlockTemplate(this._className);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

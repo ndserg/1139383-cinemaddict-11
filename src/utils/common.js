@@ -1,4 +1,4 @@
-import {MONTHS} from "./const.js";
+import {MONTHS} from "../const.js";
 
 // Генератор случайного числа
 const getRandomNumber = (min, max) => {
@@ -42,28 +42,4 @@ const generateRandomDate = (start, end, format) => {
   }
 };
 
-// Отрисовка элемента в DOM
-const RenderPosition = {
-  AFTERBEGIN: `afterbegin`,
-  BEFOREEND: `beforeend`
-};
-
-const createElement = (template) => {
-  const newElement = document.createElement(`div`);
-  newElement.innerHTML = template;
-
-  return newElement.firstChild;
-};
-
-const render = (container, element, place) => {
-  switch (place) {
-    case RenderPosition.AFTERBEGIN:
-      container.prepend(element);
-      break;
-    case RenderPosition.BEFOREEND:
-      container.append(element);
-      break;
-  }
-};
-
-export {getRandomNumber, getRandomIntegerNumber, getRandomArrayItem, getRandomArray, generateRandomDate, RenderPosition, createElement, render};
+export {getRandomNumber, getRandomIntegerNumber, getRandomArrayItem, getRandomArray, generateRandomDate};

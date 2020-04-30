@@ -1,5 +1,6 @@
 // Шаблон Звания пользователя
-import {createElement, getRandomIntegerNumber} from "../utils.js";
+import AbstractComponent from "./abstract-component.js";
+import {getRandomIntegerNumber} from "../utils/common.js";
 import {PROFILE_RATING_VALUES} from "../const.js";
 
 const createHeaderProfileTemplate = () => {
@@ -33,24 +34,8 @@ const createHeaderProfileTemplate = () => {
   );
 };
 
-export default class HeaderProfile {
-  constructor() {
-    this._element = null;
-  }
-
+export default class HeaderProfile extends AbstractComponent {
   getTemplate() {
     return createHeaderProfileTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
