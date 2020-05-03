@@ -1,4 +1,5 @@
 // Шаблон Подробная информация о фильме (попап)
+import {MONTHS} from "../const.js";
 import AbstractComponent from "./abstract-component.js";
 
 const createGenresTemplate = (genre) => {
@@ -23,6 +24,7 @@ const createFilmInfoPopupTemplate = (film) => {
     description
   } = film;
   const genresTemplate = genre.map((it) => createGenresTemplate(it)).join(`\n`);
+  const filmDate = releaseDate.getDate() + ` ` + `${MONTHS[releaseDate.getMonth()]}` + ` ` + releaseDate.getFullYear();
 
   return (
     `<section class="film-details">
@@ -65,7 +67,7 @@ const createFilmInfoPopupTemplate = (film) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Release Date</td>
-                  <td class="film-details__cell">${releaseDate}</td>
+                  <td class="film-details__cell">${filmDate}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>

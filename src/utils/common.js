@@ -30,15 +30,15 @@ const getRandomArray = (array, count) => {
 
 // Генератор случайной даты
 const generateRandomDate = (start, end, format) => {
-  const commentDate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+  const randomDate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 
   switch (format) {
     case `2019/12/31 23:59`:
-      return commentDate.getFullYear() + `/` + commentDate.getMonth() + `/` + commentDate.getDate() + ` ` + commentDate.getHours() + `:` + commentDate.getMinutes();
+      return randomDate.getFullYear() + `/` + randomDate.getMonth() + `/` + randomDate.getDate() + ` ` + randomDate.getHours() + `:` + randomDate.getMinutes();
     case `01 April 1995`:
-      return commentDate.getDate() + ` ` + `${MONTHS[commentDate.getMonth()]}` + ` ` + commentDate.getFullYear();
+      return randomDate.getDate() + ` ` + `${MONTHS[randomDate.getMonth()]}` + ` ` + randomDate.getFullYear();
     default:
-      return `empty date`;
+      return randomDate;
   }
 };
 
