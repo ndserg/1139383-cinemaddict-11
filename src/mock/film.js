@@ -33,7 +33,7 @@ const generateFilm = () => {
     director: getRandomArrayItem(PEOPLES),
     writers: getRandomArray(PEOPLES, getRandomIntegerNumber(1, PEOPLES.length)).join(`, `),
     actors: getRandomArray(PEOPLES, getRandomIntegerNumber(1, PEOPLES.length)).join(`, `),
-    releaseDate: generateRandomDate(new Date(2012, 0, 1), new Date(2020, 0, 1), `01 April 1995`),
+    releaseDate: generateRandomDate(new Date(2012, 0, 1), new Date(2020, 0, 1), ``),
     country: getRandomArrayItem(COUNTRYES),
     isInWatchlist: getRandomIntegerNumber(0, 10),
     isInHistory: getRandomIntegerNumber(0, 10),

@@ -17,7 +17,7 @@ const createFilmCardTemplate = (film) => {
     description,
     commentsCount
   } = film;
-  const year = releaseDate.substr(releaseDate.length - 4);
+  const year = releaseDate.getFullYear();
   const descriptionText = prepareDescription(description);
 
   return (
