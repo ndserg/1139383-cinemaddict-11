@@ -24,7 +24,7 @@ const createFilmInfoPopupTemplate = (film) => {
     description
   } = film;
   const genresTemplate = genre.map((it) => createGenresTemplate(it)).join(`\n`);
-  const filmDate = releaseDate.getDate() + ` ` + `${MONTHS[releaseDate.getMonth()]}` + ` ` + releaseDate.getFullYear();
+  const filmDate = `${releaseDate.getDate()} ${MONTHS[releaseDate.getMonth()]} ${releaseDate.getFullYear()}`;
 
   return (
     `<section class="film-details">
