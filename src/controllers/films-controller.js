@@ -1,63 +1,24 @@
-import FilmCardComponent from "../components/film-card.js";
 import FilmsListComponent from "../components/films-list.js";
 import FilmsListCardsContainerComponent from "../components/films-list-container.js";
 import CardsButtonShowMoreComponent from "../components/load-more-button.js";
-import FilmInfoPopupComponent from "../components/film-details.js";
-import FilmCommentsPopupComponent from "../components/film-comments.js";
+import MovieController from "./movie-controller.js";
 import FilmsExtraBlockComponent from "../components/films-extra.js";
 import NoFilmsComponent from "../components/no-films.js";
-import {generateComments} from "../mock/comment.js";
 import FilterComponent, {SortType} from "../components/filter.js";
-import {render, addPopupElement, removePopupElement, remove, RenderPosition} from "../utils/render.js";
+import {render, remove, RenderPosition} from "../utils/render.js";
 
 const SHOWING_CARDS_COUNT_ON_START = 5;
 const SHOWING_CARDS_COUNT_BY_BUTTON = 5;
 const EXTRA_FILM_CARDS_COUNT = 2;
 
-const comments = generateComments();
-const siteBodyElement = document.querySelector(`body`);
-
-// Рэндеринг карточек фильмов
-const renderFilmCard = (filmsContainerElement, film) => {
-
-  const removePopup = () => {
-    filmInfoPopupComponent.removeElement(onButtonPopupClose);
-    removePopupElement(siteBodyElement, filmInfoPopupComponent, filmPopupCommentComponent);
-  };
-
-  const onButtonPopupClose = () => {
-    removePopup();
-  };
-
-  const onEscKeyDown = (evt) => {
-    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-
-    if (isEscKey) {
-      removePopup();
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    }
-  };
-
-  const flmCardComponent = new FilmCardComponent(film);
-  flmCardComponent.setDetailClickHandler(() => {
-    addPopupElement(siteBodyElement, filmInfoPopupComponent, filmPopupCommentComponent);
-    document.addEventListener(`keydown`, onEscKeyDown);
-  });
-
-  // Подробная информация о фильме (попап)
-  const filmInfoPopupComponent = new FilmInfoPopupComponent(film);
-
-  // Комментарии к фильму (попап)
-  const filmPopupCommentComponent = new FilmCommentsPopupComponent(comments);
-
-  filmInfoPopupComponent.setPopupButtonCloseHandler(onButtonPopupClose);
-  render(filmsContainerElement, flmCardComponent, RenderPosition.BEFOREEND);
-};
-
 //  Сортировка карточек фильмов
 const renderFilms = (filmsContainerElement, films) => {
-  films.forEach((film) => {
-    renderFilmCard(filmsContainerElement, film);
+  return films.map((film) => {
+    const movieController = new MovieController(filmsContainerElement);
+
+    movieController.render(film);
+
+    return movieController;
   });
 };
 
@@ -84,6 +45,9 @@ export default class FilmsController {
   constructor(container) {
     this._container = container;
 
+    this._films = [];
+    this._showedCardsControllers = [];
+    this._showingCardsCount = SHOWING_CARDS_COUNT_ON_START;
     this._filmsListComponent = new FilmsListComponent();
     this._filmsListCardsContainerComponent = new FilmsListCardsContainerComponent();
     this._cardsButtonShowMoreComponent = new CardsButtonShowMoreComponent();
@@ -91,9 +55,15 @@ export default class FilmsController {
     this._filmsExtraBlockMostCommentedComponent = new FilmsExtraBlockComponent(`Most commented`);
     this._filterComponent = new FilterComponent();
     this._noFilmsComponent = new NoFilmsComponent();
+
+    this._onSortTypeChange = this._onSortTypeChange.bind(this);
+
+    this._filterComponent.setSortTypeChangeHandler(this._onSortTypeChange);
   }
 
   render(films) {
+    this._films = films;
+
     const container = this._container.getElement();
     const filmsListComponent = this._filmsListComponent.getElement();
     const filmsListCardsContainerComponent = this._filmsListCardsContainerComponent.getElement();
@@ -103,45 +73,36 @@ export default class FilmsController {
       render(filmsListComponent, this._filmsListCardsContainerComponent, RenderPosition.BEFOREEND);
       render(container, this._filmsListComponent, RenderPosition.BEFOREEND);
 
-      let showingCardsCount = SHOWING_CARDS_COUNT_ON_START;
-
       // Показ карточек по кнопке "Show more"
-      if (showingCardsCount >= films.length) {
+      if (this._showingCardsCount >= this._films.length) {
         return;
       }
 
       render(container, this._cardsButtonShowMoreComponent, RenderPosition.BEFOREEND);
 
       this._cardsButtonShowMoreComponent.setClickHandler(() => {
-        const prevCardCount = showingCardsCount;
-        showingCardsCount = showingCardsCount + SHOWING_CARDS_COUNT_BY_BUTTON;
+        const prevCardCount = this._showingCardsCount;
+        this._showingCardsCount = this._showingCardsCount + SHOWING_CARDS_COUNT_BY_BUTTON;
 
-        const sortedFilms = getSortedFilms(films, this._filterComponent.getSortType(), prevCardCount, showingCardsCount);
+        const sortedFilms = getSortedFilms(this._films, this._filterComponent.getSortType(), prevCardCount, this._showingCardsCount);
 
-        renderFilms(filmsListCardsContainerComponent, sortedFilms);
+        const newCards = renderFilms(filmsListCardsContainerComponent, sortedFilms);
+        this._showedCardsControllers = this._showedCardsControllers.concat(newCards);
 
-        if (showingCardsCount >= films.length) {
+        if (this._showingCardsCount >= this._films.length) {
           remove(this._cardsButtonShowMoreComponent);
         }
       });
 
-      renderFilms(filmsListCardsContainerComponent, films.slice(0, showingCardsCount));
-
-      this._filterComponent.setSortTypeChangeHandler((sortType) => {
-        const sortedTasks = getSortedFilms(films, sortType, 0, showingCardsCount);
-
-        filmsListCardsContainerComponent.innerHTML = ``;
-
-        renderFilms(filmsListCardsContainerComponent, sortedTasks);
-
-      });
+      const newCards = renderFilms(filmsListCardsContainerComponent, this._films.slice(0, this._showingCardsCount));
+      this._showedCardsControllers = this._showedCardsControllers.concat(newCards);
     };
 
     render(container, this._filterComponent, RenderPosition.BEFOREEND);
     renderFilmsList();
 
     // Рендеринг "Top Rated" карточек
-    const topRatedFilms = films
+    const topRatedFilms = this._films
       .filter((film) => film.rating > 0)
       .sort((a, b) => {
         return (b.rating - a.rating);
@@ -152,14 +113,11 @@ export default class FilmsController {
 
       const topRatedFilmsElement = container.querySelector(`.films-list--top_rated`).querySelector(`.films-list__container`);
 
-      topRatedFilms.slice(0, EXTRA_FILM_CARDS_COUNT)
-      .forEach((film) => {
-        renderFilmCard(topRatedFilmsElement, film);
-      });
+      renderFilms(topRatedFilmsElement, topRatedFilms.slice(0, EXTRA_FILM_CARDS_COUNT));
     }
 
     // Рендеринг "Most commented" карточек
-    const mostCommentedFilms = films
+    const mostCommentedFilms = this._films
     .filter((film) => film.commentsCount > 0)
     .sort((a, b) => {
       return (b.commentsCount - a.commentsCount);
@@ -170,16 +128,24 @@ export default class FilmsController {
 
       const mostCommentedFilmsElement = container.querySelector(`.films-list--most_commented`).querySelector(`.films-list__container`);
 
-      mostCommentedFilms.slice(0, EXTRA_FILM_CARDS_COUNT)
-      .forEach((film) => {
-        renderFilmCard(mostCommentedFilmsElement, film);
-      });
+      renderFilms(mostCommentedFilmsElement, mostCommentedFilms.slice(0, EXTRA_FILM_CARDS_COUNT));
     }
 
     // Вывод сообщения об отсутствии фильмов
-    if (films.length === 0) {
+    if (this._films.length === 0) {
       filmsListComponent.querySelector(`.films-list__title`).remove();
       render(filmsListComponent, this._noFilmsComponent, RenderPosition.AFTERBEGIN);
     }
+  }
+
+  _onSortTypeChange(sortType) {
+    const sortedFilms = getSortedFilms(this._films, sortType, 0, this._showingCardsCount);
+    const filmsListCardsContainerComponent = this._filmsListCardsContainerComponent.getElement();
+
+    filmsListCardsContainerComponent.innerHTML = ``;
+
+    renderFilms(filmsListCardsContainerComponent, sortedFilms);
+    const newCards = renderFilms(filmsListCardsContainerComponent, sortedFilms);
+    this._showedCardsControllers = newCards;
   }
 }
