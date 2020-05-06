@@ -16,9 +16,9 @@ const films = generateFilms(FILM_CARDS_COUNT);
 
 // Счетчик фильтров
 const filterCounter = {
-  watchlist: films.filter((film) => film.isInWatchlist > 5).length,
-  history: films.filter((film) => film.isInHistory > 5).length,
-  favorite: films.filter((film) => film.isFavorit > 5).length
+  watchlist: films.filter((film) => !film.isInWatchlist).length,
+  history: films.filter((film) => !film.isInHistory).length,
+  favorite: films.filter((film) => !film.isFavorit).length
 };
 
 const headerProfileComponent = new HeaderProfileComponent();

@@ -35,9 +35,9 @@ const generateFilm = () => {
     actors: getRandomArray(PEOPLES, getRandomIntegerNumber(1, PEOPLES.length)).join(`, `),
     releaseDate: generateRandomDate(new Date(2012, 0, 1), new Date(2020, 0, 1), ``),
     country: getRandomArrayItem(COUNTRYES),
-    isInWatchlist: getRandomIntegerNumber(0, 10),
-    isInHistory: getRandomIntegerNumber(0, 10),
-    isFavorit: getRandomIntegerNumber(0, 10),
+    isInWatchlist: Math.random() > 0.5,
+    isInHistory: Math.random() > 0.5,
+    isFavorit: Math.random() > 0.5,
     commentsCount: getRandomIntegerNumber(0, 100)
   };
 };

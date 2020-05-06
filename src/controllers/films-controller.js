@@ -12,9 +12,10 @@ const SHOWING_CARDS_COUNT_BY_BUTTON = 5;
 const EXTRA_FILM_CARDS_COUNT = 2;
 
 //  Сортировка карточек фильмов
-const renderFilms = (filmsContainerElement, films) => {
+const renderFilms = (filmsContainerElement, films, onDataChange) => {
+
   return films.map((film) => {
-    const movieController = new MovieController(filmsContainerElement);
+    const movieController = new MovieController(filmsContainerElement, onDataChange);
 
     movieController.render(film);
 
@@ -56,6 +57,8 @@ export default class FilmsController {
     this._filterComponent = new FilterComponent();
     this._noFilmsComponent = new NoFilmsComponent();
 
+    this._onDataChange = this._onDataChange.bind(this);
+
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
 
     this._filterComponent.setSortTypeChangeHandler(this._onSortTypeChange);
@@ -86,7 +89,7 @@ export default class FilmsController {
 
         const sortedFilms = getSortedFilms(this._films, this._filterComponent.getSortType(), prevCardCount, this._showingCardsCount);
 
-        const newCards = renderFilms(filmsListCardsContainerComponent, sortedFilms);
+        const newCards = renderFilms(filmsListCardsContainerComponent, sortedFilms, this._onDataChange);
         this._showedCardsControllers = this._showedCardsControllers.concat(newCards);
 
         if (this._showingCardsCount >= this._films.length) {
@@ -94,7 +97,7 @@ export default class FilmsController {
         }
       });
 
-      const newCards = renderFilms(filmsListCardsContainerComponent, this._films.slice(0, this._showingCardsCount));
+      const newCards = renderFilms(filmsListCardsContainerComponent, this._films.slice(0, this._showingCardsCount), this._onDataChange);
       this._showedCardsControllers = this._showedCardsControllers.concat(newCards);
     };
 
@@ -113,7 +116,7 @@ export default class FilmsController {
 
       const topRatedFilmsElement = container.querySelector(`.films-list--top_rated`).querySelector(`.films-list__container`);
 
-      renderFilms(topRatedFilmsElement, topRatedFilms.slice(0, EXTRA_FILM_CARDS_COUNT));
+      renderFilms(topRatedFilmsElement, topRatedFilms.slice(0, EXTRA_FILM_CARDS_COUNT), this._onDataChange);
     }
 
     // Рендеринг "Most commented" карточек
@@ -128,7 +131,7 @@ export default class FilmsController {
 
       const mostCommentedFilmsElement = container.querySelector(`.films-list--most_commented`).querySelector(`.films-list__container`);
 
-      renderFilms(mostCommentedFilmsElement, mostCommentedFilms.slice(0, EXTRA_FILM_CARDS_COUNT));
+      renderFilms(mostCommentedFilmsElement, mostCommentedFilms.slice(0, EXTRA_FILM_CARDS_COUNT), this._onDataChange);
     }
 
     // Вывод сообщения об отсутствии фильмов
@@ -138,14 +141,28 @@ export default class FilmsController {
     }
   }
 
+  // Обработка кликов на кнопках «Add to watchlist», «Already watched», «Add to favorites»
+  _onDataChange(movieController, oldData, newData) {
+    const index = this._films.findIndex((it) => it === oldData);
+
+    if (index === -1) {
+      return;
+    }
+
+    this._films = [].concat(this._films.slice(0, index), newData, this._films.slice(index + 1));
+
+    movieController.render(this._films[index]);
+  }
+
+  // Сортировка фильмов
   _onSortTypeChange(sortType) {
     const sortedFilms = getSortedFilms(this._films, sortType, 0, this._showingCardsCount);
     const filmsListCardsContainerComponent = this._filmsListCardsContainerComponent.getElement();
 
     filmsListCardsContainerComponent.innerHTML = ``;
 
-    renderFilms(filmsListCardsContainerComponent, sortedFilms);
-    const newCards = renderFilms(filmsListCardsContainerComponent, sortedFilms);
+    renderFilms(filmsListCardsContainerComponent, sortedFilms, this._onDataChange);
+    const newCards = renderFilms(filmsListCardsContainerComponent, sortedFilms, this._onDataChange);
     this._showedCardsControllers = newCards;
   }
 }
