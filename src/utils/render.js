@@ -22,16 +22,6 @@ const render = (container, component, place) => {
   }
 };
 
-const addPopupElement = (place, component, subComponent) => {
-  place.appendChild(component.getElement());
-  component.getElement().appendChild(subComponent.getElement());
-};
-
-const removePopupElement = (place, component, subComponent) => {
-  component.getElement().removeChild(subComponent.getElement());
-  place.removeChild(component.getElement());
-};
-
 const remove = (component) => {
   component.getElement().remove();
   component.removeElement();
@@ -53,8 +43,6 @@ export {
   RenderPosition,
   createElement,
   render,
-  addPopupElement,
-  removePopupElement,
   remove,
   replace
 };

@@ -9,6 +9,7 @@ import {FILM_GENRES} from "../const.js";
 import {COUNTRYES} from "../const.js";
 import {PEOPLES} from "../const.js";
 import {DESCRIPTION_TEXT} from "../const.js";
+import {generateComments} from "./comment.js";
 
 const generateFilmDescription = () => {
   const FILM_DESCRIPTIONS = DESCRIPTION_TEXT.split(/[\.!\?]+/);
@@ -20,6 +21,8 @@ const generateFilmDescription = () => {
   }
   return filmDescription;
 };
+
+const comments = generateComments();
 
 const generateFilm = () => {
   return {
@@ -38,7 +41,8 @@ const generateFilm = () => {
     isInWatchlist: Math.random() > 0.5,
     isInHistory: Math.random() > 0.5,
     isFavorit: Math.random() > 0.5,
-    commentsCount: getRandomIntegerNumber(0, 100)
+    comments,
+    commentsCount: comments.length
   };
 };
 
