@@ -10,7 +10,8 @@ const createGenresMarkup = (genre) => {
 };
 
 const createFilmInfoPopupMarkup = (film) => {
-  const {name,
+  const {
+    name,
     poster,
     rating,
     age,
@@ -189,7 +190,7 @@ export default class FilmPopup extends AbstractSmartComponent {
 
     this._film = film;
 
-    this._PopupButtonClose = this.getElement().querySelector(`.film-details__close-btn`);
+    this._popupButtonClose = this.getElement().querySelector(`.film-details__close-btn`);
     this._subscribeOnEvents();
   }
 
@@ -220,11 +221,11 @@ export default class FilmPopup extends AbstractSmartComponent {
   }
 
   setPopupButtonCloseHandler(handler) {
-    this._PopupButtonClose.addEventListener(`click`, handler);
+    this._popupButtonClose.addEventListener(`click`, handler);
   }
 
   removeElement(handler) {
-    this._PopupButtonClose.addEventListener(`click`, handler);
+    this._popupButtonClose.addEventListener(`click`, handler);
   }
 
   setWatchlistButtonClickHandler(handler) {
