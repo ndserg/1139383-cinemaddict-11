@@ -1,5 +1,5 @@
 // Шаблон Подробная информация о фильме (попап)
-import {MONTHS} from "../const.js";
+import {MONTHS, COMMENT_EMOJIS} from "../const.js";
 import AbstractSmartComponent from "./abstract-smart-component.js";
 
 const createGenresMarkup = (genre) => {
@@ -104,7 +104,7 @@ const createCommentMarkup = (comment) => {
   return (
     `<li class="film-details__comment">
       <span class="film-details__comment-emoji">
-        <img src="${emoji}" width="55" height="55" alt="emoji-smile">
+        <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">
       </span>
       <div>
         <p class="film-details__comment-text">${text}</p>
@@ -118,8 +118,25 @@ const createCommentMarkup = (comment) => {
   );
 };
 
-const createFilmCommentsPopupMarkup = (comments) => {
+const createPopupEmojiListMarkup = (emojis) => {
+
+  return emojis
+    .map((emoji) => {
+      const isChecked = emoji;
+      return (
+        `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emoji}" value="${emoji}" ${isChecked ? `checked` : ``}>
+        <label class="film-details__emoji-label" for="emoji-${emoji}">
+          <img src="./images/emoji/${emoji}.png" width="30" height="30" alt="emoji">
+        </label>`
+      );
+    })
+    .join(`\n`);
+};
+
+const createFilmCommentsPopupMarkup = (film) => {
+  const {comments} = film;
   const commentsTemplate = comments.map((it) => createCommentMarkup(it)).join(`\n`);
+  const emojiList = createPopupEmojiListMarkup(COMMENT_EMOJIS);
 
   return (
     `<div class="form-details__bottom-container">
@@ -131,32 +148,15 @@ const createFilmCommentsPopupMarkup = (comments) => {
         </ul>
 
         <div class="film-details__new-comment">
-          <div for="add-emoji" class="film-details__add-emoji-label"></div>
+          <div for="add-emoji" class="film-details__add-emoji-label">
+          </div>
 
           <label class="film-details__comment-label">
             <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
           </label>
 
           <div class="film-details__emoji-list">
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
-            <label class="film-details__emoji-label" for="emoji-smile">
-              <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
-            </label>
-
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
-            <label class="film-details__emoji-label" for="emoji-sleeping">
-              <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
-            </label>
-
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
-            <label class="film-details__emoji-label" for="emoji-puke">
-              <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
-            </label>
-
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
-            <label class="film-details__emoji-label" for="emoji-angry">
-              <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
-            </label>
+            ${emojiList}
           </div>
         </div>
       </section>
@@ -165,9 +165,8 @@ const createFilmCommentsPopupMarkup = (comments) => {
 };
 
 const createFilmPopupTemplate = (film) => {
-  const {comments} = film;
   const filmInfo = createFilmInfoPopupMarkup(film);
-  const commentsMarkup = createFilmCommentsPopupMarkup(comments);
+  const commentsMarkup = createFilmCommentsPopupMarkup(film);
 
   return (
     `<section class="film-details">
@@ -189,9 +188,8 @@ export default class FilmPopup extends AbstractSmartComponent {
     super();
 
     this._film = film;
-    this._PopupButtonClose = this.getElement().querySelector(`.film-details__close-btn`);
-    this._submitHandler = null;
 
+    this._PopupButtonClose = this.getElement().querySelector(`.film-details__close-btn`);
     this._subscribeOnEvents();
   }
 
@@ -208,7 +206,17 @@ export default class FilmPopup extends AbstractSmartComponent {
   }
 
   _subscribeOnEvents() {
-    //  const element = this.getElement();
+    const element = this.getElement();
+
+    const emojiList = element.querySelectorAll(`.film-details__emoji-item`);
+    const emojiInsert = element.querySelector(`.film-details__add-emoji-label`);
+
+    emojiList.forEach(() => {
+      element.addEventListener(`change`, (evt) => {
+        const _activeEmoji = evt.target.value;
+        emojiInsert.innerHTML = `<img src="./images/emoji/${_activeEmoji}.png" width="55" height="55" alt="emoji-${_activeEmoji}">`;
+      });
+    });
   }
 
   setPopupButtonCloseHandler(handler) {

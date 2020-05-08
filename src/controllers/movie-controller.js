@@ -4,10 +4,17 @@ import {render, replace, remove, RenderPosition} from "../utils/render.js";
 
 const siteBodyElement = document.querySelector(`body`);
 
+const Mode = {
+  DEFAULT: `default`,
+  OPEN_POPUP: `openPopup`,
+};
+
 export default class MovieController {
-  constructor(container, onDataChange) {
+  constructor(container, onDataChange, onViewChange) {
     this._container = container;
     this._onDataChange = onDataChange;
+    this._onViewChange = onViewChange;
+    this._mode = Mode.DEFAULT;
 
     this._filmCardComponent = null;
     this._filmPopupComponent = null;
@@ -28,8 +35,10 @@ export default class MovieController {
     };
 
     this._filmCardComponent.setDetailClickHandler(() => {
+      this._onViewChange();
       render(siteBodyElement, this._filmPopupComponent, RenderPosition.BEFOREEND);
       document.addEventListener(`keydown`, this._onEscKeyDown);
+      this._mode = Mode.OPEN_POPUP;
     });
 
     this._filmPopupComponent.setPopupButtonCloseHandler(onButtonPopupClose);
@@ -83,6 +92,12 @@ export default class MovieController {
       replace(this._filmPopupComponent, oldFilmPopupComponent);
     } else {
       render(this._container, this._filmCardComponent, RenderPosition.BEFOREEND);
+    }
+  }
+
+  setDefaultView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._removePopup();
     }
   }
 
