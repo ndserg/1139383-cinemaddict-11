@@ -9,6 +9,7 @@ import {FILM_GENRES} from "../const.js";
 import {COUNTRYES} from "../const.js";
 import {PEOPLES} from "../const.js";
 import {DESCRIPTION_TEXT} from "../const.js";
+import {generateComments} from "./comment.js";
 
 const generateFilmDescription = () => {
   const FILM_DESCRIPTIONS = DESCRIPTION_TEXT.split(/[\.!\?]+/);
@@ -20,6 +21,8 @@ const generateFilmDescription = () => {
   }
   return filmDescription;
 };
+
+const comments = generateComments();
 
 const generateFilm = () => {
   return {
@@ -35,10 +38,11 @@ const generateFilm = () => {
     actors: getRandomArray(PEOPLES, getRandomIntegerNumber(1, PEOPLES.length)).join(`, `),
     releaseDate: generateRandomDate(new Date(2012, 0, 1), new Date(2020, 0, 1), ``),
     country: getRandomArrayItem(COUNTRYES),
-    isInWatchlist: getRandomIntegerNumber(0, 10),
-    isInHistory: getRandomIntegerNumber(0, 10),
-    isFavorit: getRandomIntegerNumber(0, 10),
-    commentsCount: getRandomIntegerNumber(0, 100)
+    isInWatchlist: Math.random() > 0.5,
+    isInHistory: Math.random() > 0.5,
+    isFavorite: Math.random() > 0.5,
+    comments,
+    commentsCount: comments.length
   };
 };
 

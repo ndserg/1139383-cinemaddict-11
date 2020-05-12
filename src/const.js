@@ -14,10 +14,10 @@ const MONTHS = [
 ];
 
 const COMMENT_EMOJIS = [
-  `./images/emoji/sleeping.png`,
-  `./images/emoji/puke.png`,
-  `./images/emoji/angry.png`,
-  `./images/emoji/smile.png`
+  `smile`,
+  `sleeping`,
+  `puke`,
+  `angry`
 ];
 
 const COMMENT_TEXTS = [
