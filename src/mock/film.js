@@ -40,7 +40,7 @@ const generateFilm = () => {
     country: getRandomArrayItem(COUNTRYES),
     isInWatchlist: Math.random() > 0.5,
     isInHistory: Math.random() > 0.5,
-    isFavorit: Math.random() > 0.5,
+    isFavorite: Math.random() > 0.5,
     comments,
     commentsCount: comments.length
   };

@@ -18,7 +18,7 @@ const films = generateFilms(FILM_CARDS_COUNT);
 const filterCounter = {
   watchlist: films.filter((film) => !film.isInWatchlist).length,
   history: films.filter((film) => !film.isInHistory).length,
-  isFavorite: films.filter((film) => !film.isFavorit).length
+  favorite: films.filter((film) => !film.isFavorite).length
 };
 
 const headerProfileComponent = new HeaderProfileComponent();

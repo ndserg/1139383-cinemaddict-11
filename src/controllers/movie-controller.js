@@ -61,7 +61,7 @@ export default class MovieController {
     this._filmCardComponent.setFavoriteButtonClickHandler((evt) => {
       evt.preventDefault();
       this._onDataChange(this, film, Object.assign({}, film, {
-        isFavorit: !film.isFavorit,
+        isFavorite: !film.isFavorite,
       }));
     });
 
@@ -83,7 +83,7 @@ export default class MovieController {
     this._filmPopupComponent.setFavoriteButtonClickHandler((evt) => {
       evt.preventDefault();
       this._onDataChange(this, film, Object.assign({}, film, {
-        isFavorit: !film.isFavorit,
+        isFavorite: !film.isFavorite,
       }));
     });
 
