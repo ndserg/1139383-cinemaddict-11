@@ -1,4 +1,4 @@
-import {MONTHS} from "../const.js";
+import moment from "moment";
 
 // Генератор случайного числа
 const getRandomNumber = (min, max) => {
@@ -29,17 +29,15 @@ const getRandomArray = (array, count) => {
 };
 
 // Генератор случайной даты
-const generateRandomDate = (start, end, format) => {
-  const randomDate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-
-  switch (format) {
-    case `2019/12/31 23:59`:
-      return randomDate.getFullYear() + `/` + randomDate.getMonth() + `/` + randomDate.getDate() + ` ` + randomDate.getHours() + `:` + randomDate.getMinutes();
-    case `01 April 1995`:
-      return randomDate.getDate() + ` ` + `${MONTHS[randomDate.getMonth()]}` + ` ` + randomDate.getFullYear();
-    default:
-      return randomDate;
-  }
+const generateRandomDate = (start, end) => {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 };
 
-export {getRandomNumber, getRandomIntegerNumber, getRandomArrayItem, getRandomArray, generateRandomDate};
+// Генератор случайной продолжительности в минутах
+const getRandomDuration = (min, max) => {
+  const time = getRandomIntegerNumber(min, max) * 60;
+
+  return moment.utc(time * 1000).format(`HH:mm`);
+};
+
+export {getRandomNumber, getRandomIntegerNumber, getRandomArrayItem, getRandomArray, generateRandomDate, getRandomDuration};

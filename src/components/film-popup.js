@@ -1,6 +1,7 @@
 // Шаблон Подробная информация о фильме (попап)
-import {MONTHS, COMMENT_EMOJIS} from "../const.js";
+import {COMMENT_EMOJIS} from "../const.js";
 import AbstractSmartComponent from "./abstract-smart-component.js";
+import moment from "moment";
 
 const createGenresMarkup = (genre) => {
 
@@ -25,8 +26,7 @@ const createFilmInfoPopupMarkup = (film) => {
     description
   } = film;
   const genresMarkup = genre.map((it) => createGenresMarkup(it)).join(`\n`);
-  const filmDate = `${releaseDate.getDate()} ${MONTHS[releaseDate.getMonth()]} ${releaseDate.getFullYear()}`;
-
+  const filmDate = moment(releaseDate).format(`DD MMMM YYYY`);
   return (
     `<div class="film-details__info-wrap">
       <div class="film-details__poster">
