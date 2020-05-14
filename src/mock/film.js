@@ -3,6 +3,7 @@ import {getRandomIntegerNumber} from "../utils/common.js";
 import {getRandomArrayItem} from "../utils/common.js";
 import {getRandomArray} from "../utils/common.js";
 import {generateRandomDate} from "../utils/common.js";
+import {getRandomDuration} from "../utils/common.js";
 import {FILM_NAMES} from "../const.js";
 import {FILM_POSTERS} from "../const.js";
 import {FILM_GENRES} from "../const.js";
@@ -28,7 +29,7 @@ const generateFilm = () => {
   return {
     name: getRandomArrayItem(FILM_NAMES),
     rating: getRandomNumber(0, 10),
-    duration: getRandomIntegerNumber(0, 3) + `h ` + getRandomIntegerNumber(0, 60) + `m`,
+    duration: getRandomDuration(0, 240),
     genre: getRandomArray(FILM_GENRES, getRandomIntegerNumber(1, FILM_GENRES.length)),
     poster: getRandomArrayItem(FILM_POSTERS),
     description: generateFilmDescription(),
@@ -36,7 +37,7 @@ const generateFilm = () => {
     director: getRandomArrayItem(PEOPLES),
     writers: getRandomArray(PEOPLES, getRandomIntegerNumber(1, PEOPLES.length)).join(`, `),
     actors: getRandomArray(PEOPLES, getRandomIntegerNumber(1, PEOPLES.length)).join(`, `),
-    releaseDate: generateRandomDate(new Date(2012, 0, 1), new Date(2020, 0, 1), ``),
+    releaseDate: generateRandomDate(new Date(2012, 0, 1), new Date(2020, 0, 1)),
     country: getRandomArrayItem(COUNTRYES),
     isInWatchlist: Math.random() > 0.5,
     isInHistory: Math.random() > 0.5,
