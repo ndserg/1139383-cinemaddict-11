@@ -5,6 +5,7 @@ import FooterStatisticComponent from "./components/footer-statistic.js";
 import {generateFilms} from "./mock/film.js";
 import {render, RenderPosition} from "./utils/render.js";
 import FilmsController from "./controllers/films-controller.js";
+import FilmsModel from "./models/films.js";
 
 const FILM_CARDS_COUNT = 20;
 
@@ -13,6 +14,8 @@ const siteHeaderElement = document.querySelector(`.header`);
 const footerStatisticElement = document.querySelector(`.footer__statistics`);
 
 const films = generateFilms(FILM_CARDS_COUNT);
+const filmsModel = new FilmsModel();
+filmsModel.setFilms(films);
 
 // Счетчик фильтров
 const filterCounter = {
@@ -24,7 +27,7 @@ const filterCounter = {
 const headerProfileComponent = new HeaderProfileComponent();
 const siteMenuComponent = new SiteMenuComponent(filterCounter);
 const filmsBlockComponent = new FilmsBlockComponent();
-const filmsController = new FilmsController(filmsBlockComponent);
+const filmsController = new FilmsController(filmsBlockComponent, filmsModel);
 
 render(siteHeaderElement, headerProfileComponent, RenderPosition.BEFOREEND);
 render(siteMainElement, siteMenuComponent, RenderPosition.BEFOREEND);

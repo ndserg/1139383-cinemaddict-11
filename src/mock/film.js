@@ -27,6 +27,7 @@ const comments = generateComments();
 
 const generateFilm = () => {
   return {
+    id: String(new Date() + Math.random()),
     name: getRandomArrayItem(FILM_NAMES),
     rating: getRandomNumber(0, 10),
     duration: getRandomDuration(0, 240),
