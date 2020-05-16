@@ -105,3 +105,10 @@ export {MONTHS,
   DESCRIPTION_TEXT,
   PROFILE_RATING_VALUES
 };
+
+export const FilterType = {
+  ALL: `all`,
+  WATCHLIST: `watchlist`,
+  HISTORY: `history`,
+  FAVORITES: `favorites`
+};

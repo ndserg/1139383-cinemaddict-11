@@ -1,54 +1,44 @@
-// Шаблон Фильтра
 import AbstractComponent from "./abstract-component.js";
 
-export const SortType = {
-  DATE: `date`,
-  RATING: `raiting`,
-  DEFAULT: `default`,
+const FILTER_ID_PREFIX = `filter__`;
+
+const getFilterNameById = (id) => {
+  return id.substring(FILTER_ID_PREFIX.length);
 };
 
-const createFilterTemplate = () => {
+const createFilterMarkup = (filter) => {
+  const {name, count, isActive} = filter;
+  const activeClass = isActive ? `main-navigation__item--active` : ``;
+
   return (
-    `<ul class="sort">
-      <li><a href="#" class="sort__button sort__button--active" data-sort-type="${SortType.DEFAULT}">Sort by default</a></li>
-      <li><a href="#" class="sort__button" data-sort-type="${SortType.DATE}">Sort by date</a></li>
-      <li><a href="#" class="sort__button" data-sort-type="${SortType.RATING}">Sort by rating</a></li>
-    </ul>`
+    `<a href="#${name}" id="filter__${name}" class="main-navigation__item ${activeClass}">${name} <span class="main-navigation__item-count">${count}</span></a>`
+  );
+};
+
+const createFilterTemplate = (filters) => {
+  const filtersMarkup = filters.map((it) => createFilterMarkup(it, it.active)).join(`\n`);
+
+  return (
+    `<div class="main-navigation__items">
+      ${filtersMarkup}
+    </div>`
   );
 };
 
 export default class Filter extends AbstractComponent {
-  constructor() {
+  constructor(filters) {
     super();
 
-    this._currentSortType = SortType.DEFAULT;
+    this._filters = filters;
   }
-
   getTemplate() {
-    return createFilterTemplate();
+    return createFilterTemplate(this._filters);
   }
 
-  getSortType() {
-    return this._currentSortType;
-  }
-
-  setSortTypeChangeHandler(handler) {
+  setFilterChangeHandler(handler) {
     this.getElement().addEventListener(`click`, (evt) => {
-      evt.preventDefault();
-
-      if (evt.target.tagName !== `A`) {
-        return;
-      }
-
-      const sortType = evt.target.dataset.sortType;
-
-      if (this._currentSortType === sortType) {
-        return;
-      }
-
-      this._currentSortType = sortType;
-
-      handler(this._currentSortType);
+      const filterName = getFilterNameById(evt.target.id);
+      handler(filterName);
     });
   }
 }
