@@ -1,7 +1,10 @@
 // Шаблон Подробная информация о фильме (попап)
 import {COMMENT_EMOJIS} from "../const.js";
 import AbstractSmartComponent from "./abstract-smart-component.js";
+import CommentComponent from "./comments.js";
+import {render, remove, RenderPosition} from "../utils/render.js";
 import moment from "moment";
+import {encode} from "he";
 
 const createGenresMarkup = (genre) => {
 
@@ -99,26 +102,6 @@ const createFilmInfoPopupMarkup = (film) => {
   );
 };
 
-const createCommentMarkup = (comment) => {
-  const {emoji, text, author, date} = comment;
-
-  return (
-    `<li class="film-details__comment">
-      <span class="film-details__comment-emoji">
-        <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">
-      </span>
-      <div>
-        <p class="film-details__comment-text">${text}</p>
-        <p class="film-details__comment-info">
-          <span class="film-details__comment-author">${author}</span>
-          <span class="film-details__comment-day">${date}</span>
-          <button class="film-details__comment-delete">Delete</button>
-        </p>
-      </div>
-    </li>`
-  );
-};
-
 const createPopupEmojiListMarkup = (emojis) => {
 
   return emojis
@@ -136,7 +119,6 @@ const createPopupEmojiListMarkup = (emojis) => {
 
 const createFilmCommentsPopupMarkup = (film) => {
   const {comments} = film;
-  const commentsTemplate = comments.map((it) => createCommentMarkup(it)).join(`\n`);
   const emojiList = createPopupEmojiListMarkup(COMMENT_EMOJIS);
 
   return (
@@ -145,11 +127,12 @@ const createFilmCommentsPopupMarkup = (film) => {
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
         <ul class="film-details__comments-list">
-          ${commentsTemplate}
+
         </ul>
 
         <div class="film-details__new-comment">
           <div for="add-emoji" class="film-details__add-emoji-label">
+
           </div>
 
           <label class="film-details__comment-label">
@@ -185,37 +168,111 @@ const createFilmPopupTemplate = (film) => {
 };
 
 export default class FilmPopup extends AbstractSmartComponent {
-  constructor(film) {
+  constructor(film, commentsData, onCommentChange) {
     super();
 
-    this._film = film;
+    this._filmData = film;
+    this._commentsData = commentsData;
+    this._activeEmoji = ``;
+    this._emojiInsert = this.getElement().querySelector(`.film-details__add-emoji-label`);
+
+    this._onCommentChange = onCommentChange;
+    this._showedCommentsComponents = [];
 
     this._popupButtonClose = this.getElement().querySelector(`.film-details__close-btn`);
-    this._subscribeOnEvents();
+    this._setActiveEmoji();
   }
 
   getTemplate() {
-    return createFilmPopupTemplate(this._film);
+    return createFilmPopupTemplate(this._filmData);
+  }
+
+  renderComments(commentsData) {
+    this._commentsData = commentsData;
+    this._removeAllComments();
+    this._setCommentsCount(this._commentsData);
+    this._commentsData.forEach((comment) => {
+      const commentComponent = new CommentComponent(comment);
+      this._showedCommentsComponents.push(commentComponent);
+      commentComponent.setDeleteCommentHandler((evt) => {
+        evt.preventDefault();
+        this._onCommentChange(comment, null);
+      });
+      render(this._getCommentsListElement(), commentComponent, RenderPosition.BEFOREEND);
+    });
+  }
+
+  _setCommentsCount(value) {
+    this.getElement().querySelector(`.film-details__comments-count`).textContent = value.length;
+  }
+
+  getComments() {
+    return this._commentsData;
+  }
+
+  _getCommentsListElement() {
+    return this.getElement().querySelector(`.film-details__comments-list`);
+  }
+
+  _removeAllComments() {
+    this._showedCommentsComponents.forEach((component) => remove(component));
+    this._showedCommentsComponents = [];
+  }
+
+  _getCommentInputElement() {
+    return this.getElement().querySelector(`.film-details__comment-input`);
+  }
+
+  setNewFilmData(newFilmData) {
+    this._filmData = newFilmData;
+  }
+
+  setNewCommentHandler() {
+    const commentInput = this._getCommentInputElement();
+    commentInput.addEventListener(`input`, () => {
+      this._newCommentTextValue = encode(commentInput.value);
+    });
+    commentInput.addEventListener(`keydown`, (evt) => {
+      if (evt.key === `Enter` && this._activeEmoji) {
+        this._onCommentChange(null, {
+          id: String(new Date() + Math.random()),
+          emoji: this._activeEmoji,
+          text: encode(commentInput.value),
+          author: `author`,
+          date: new Date(),
+        });
+        commentInput.value = ``;
+        this._newCommentTextValue = ``;
+      }
+    });
+  }
+
+  resetForm() {
+    this.getElement().querySelector(`.film-details__inner`).reset();
+    this._emojiInsert.innerHTML = ``;
   }
 
   recoveryListeners() {
-    this._subscribeOnEvents();
+    this._setActiveEmoji();
+    this.setNewCommentHandler();
   }
 
   rerender() {
     super.rerender();
+    this.renderComments(this._commentsData);
   }
 
-  _subscribeOnEvents() {
+  _setActiveEmoji() {
     const element = this.getElement();
 
     const emojiList = element.querySelectorAll(`.film-details__emoji-item`);
-    const emojiInsert = element.querySelector(`.film-details__add-emoji-label`);
 
     emojiList.forEach(() => {
       element.addEventListener(`change`, (evt) => {
-        const _activeEmoji = evt.target.value;
-        emojiInsert.innerHTML = `<img src="./images/emoji/${_activeEmoji}.png" width="55" height="55" alt="emoji-${_activeEmoji}">`;
+        this._activeEmoji = evt.target.value;
+        if (COMMENT_EMOJIS.includes(this._activeEmoji)) {
+          this._emojiInsert.innerHTML = `<img src="./images/emoji/${this._activeEmoji}.png" width="55" height="55" alt="emoji-${this._activeEmoji}">`;
+        }
       });
     });
   }

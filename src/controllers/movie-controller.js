@@ -1,5 +1,6 @@
 import FilmCardComponent from "../components/film-card.js";
 import FilmPopupComponent from "../components/film-popup.js";
+import CommentsModel from "../models/comments.js";
 import {render, replace, remove, RenderPosition} from "../utils/render.js";
 
 const siteBodyElement = document.querySelector(`body`);
@@ -16,6 +17,11 @@ export default class MovieController {
     this._onViewChange = onViewChange;
     this._mode = Mode.DEFAULT;
 
+    this._filmData = {};
+
+    this._commentsData = [];
+    this._onCommentChange = this._onCommentChange.bind(this);
+
     this._filmCardComponent = null;
     this._filmPopupComponent = null;
 
@@ -23,12 +29,22 @@ export default class MovieController {
   }
 
   render(film) {
+    this._filmData = film;
+    this._commentsModel = new CommentsModel();
+    this._commentsModel.setComments(this._filmData.comments);
+    this._commentsData = this._commentsModel.getComments();
+
     // Рэндеринг карточек фильмов
     const oldFilmCardComponent = this._filmCardComponent;
     const oldFilmPopupComponent = this._filmPopupComponent;
 
-    this._filmCardComponent = new FilmCardComponent(film);
-    this._filmPopupComponent = new FilmPopupComponent(film);
+    this._filmCardComponent = new FilmCardComponent(this._filmData, this._commentsData);
+    this._filmPopupComponent = new FilmPopupComponent(this._filmData, this._commentsData, this._onCommentChange);
+
+    if (this._filmPopupComponent) {
+      this._filmPopupComponent.setNewFilmData(this._filmData);
+      this._filmPopupComponent.rerender();
+    }
 
     const onButtonPopupClose = () => {
       this._removePopup(onButtonPopupClose);
@@ -37,13 +53,14 @@ export default class MovieController {
     this._filmCardComponent.setDetailClickHandler(() => {
       this._onViewChange();
       render(siteBodyElement, this._filmPopupComponent, RenderPosition.BEFOREEND);
+      this._filmPopupComponent.renderComments(this._commentsData);
       document.addEventListener(`keydown`, this._onEscKeyDown);
       this._mode = Mode.OPEN_POPUP;
     });
 
     this._filmPopupComponent.setPopupButtonCloseHandler(onButtonPopupClose);
 
-    // Обработка кликов на кнопках   карточек фильмов «Add to watchlist», «Already watched», «Add to favorites»
+    // Обработка кликов на кнопках карточек фильмов «Add to watchlist», «Already watched», «Add to favorites»
     this._filmCardComponent.setWatchlistButtonClickHandler((evt) => {
       evt.preventDefault();
       this._onDataChange(this, film, Object.assign({}, film, {
@@ -101,6 +118,20 @@ export default class MovieController {
     }
   }
 
+  _onCommentChange(oldData, newData) {
+    let isSuccess = false;
+    if (newData === null) {
+      isSuccess = this._commentsModel.removeComment(oldData.id);
+    } else {
+      isSuccess = this._commentsModel.addComment(newData);
+    }
+
+    if (isSuccess) {
+      this._commentsData = this._commentsModel.getComments();
+      this._filmPopupComponent.renderComments(this._commentsData);
+    }
+  }
+
   destroy() {
     remove(this._filmCardComponent);
     remove(this._filmPopupComponent);
@@ -109,6 +140,10 @@ export default class MovieController {
 
   _removePopup(element) {
     this._filmPopupComponent.removeElement(element);
+    this._filmPopupComponent.resetForm();
+    this._popupMode = Mode.DEFAULT;
+    this._commentsModel.setComments(this._filmData.comments);
+    this._commentsData = this._commentsModel.getComments();
     remove(this._filmPopupComponent);
   }
 
