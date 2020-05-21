@@ -72,6 +72,14 @@ export default class FilmsController {
     this._filmsModel.setFilterChangeHandler(this._onFilterChange);
   }
 
+  hide() {
+    this._container.hide();
+  }
+
+  show() {
+    this._container.show();
+  }
+
   render() {
     const films = this._filmsModel.getFilms();
     const container = this._container.getElement();

@@ -1,5 +1,6 @@
 // Шаблон Карточки Фильма
 import AbstractComponent from "./abstract-component.js";
+import moment from "moment";
 
 const prepareDescription = (description) => {
   const DESCRIPTION_LENGTH = 139;
@@ -19,6 +20,7 @@ const createFilmCardTemplate = (film) => {
   } = film;
   const year = releaseDate.getFullYear();
   const descriptionText = prepareDescription(description);
+  const filmDuration = moment.utc(duration * 60 * 1000).format(`HH:mm`);
 
   return (
     `<article class="film-card">
@@ -26,7 +28,7 @@ const createFilmCardTemplate = (film) => {
       <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
         <span class="film-card__year">${year}</span>
-        <span class="film-card__duration">${duration}</span>
+        <span class="film-card__duration">${filmDuration}</span>
         <span class="film-card__genre">${genre.join(`, `)}</span>
       </p>
       <img src="${poster}" alt="" class="film-card__poster">
@@ -53,7 +55,8 @@ export default class FilmCard extends AbstractComponent {
   }
 
   setDetailClickHandler(handler) {
-    this.getElement().querySelector(`.film-card__poster`).addEventListener(`click`, handler);
+    this.getElement().querySelector(`.film-card__poster`)
+    .addEventListener(`click`, handler);
   }
 
   setWatchlistButtonClickHandler(handler) {

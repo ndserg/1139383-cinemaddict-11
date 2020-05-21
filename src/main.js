@@ -1,6 +1,7 @@
 import HeaderProfileComponent from "./components/header-profile.js";
 import SiteMenuComponent from "./components/site-menu.js";
 import StatComponent from "./components/stat.js";
+import StatisticsComponent from "./components/statistics.js";
 import FilterController from "./controllers/filter.js";
 import FilmsBlockComponent from "./components/films-block.js";
 import FooterStatisticComponent from "./components/footer-statistic.js";
@@ -19,7 +20,7 @@ const films = generateFilms(FILM_CARDS_COUNT);
 const filmsModel = new FilmsModel();
 filmsModel.setFilms(films);
 
-const headerProfileComponent = new HeaderProfileComponent();
+const headerProfileComponent = new HeaderProfileComponent(filmsModel);
 const siteMenuComponent = new SiteMenuComponent();
 const statComponent = new StatComponent();
 const filmsBlockComponent = new FilmsBlockComponent();
@@ -28,6 +29,25 @@ const filmsController = new FilmsController(filmsBlockComponent, filmsModel);
 render(siteHeaderElement, headerProfileComponent, RenderPosition.BEFOREEND);
 render(siteMainElement, siteMenuComponent, RenderPosition.BEFOREEND);
 render(siteMainElement, filmsBlockComponent, RenderPosition.BEFOREEND);
+
+const statisticsComponent = new StatisticsComponent(filmsModel);
+render(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
+
+let statisticsComponentShowed = false;
+statisticsComponent.hide();
+
+statComponent.setStatClickHandler(() => {
+  if (statisticsComponentShowed) {
+    statisticsComponent.hide();
+    filmsController.show();
+    statisticsComponentShowed = false;
+  } else {
+    statisticsComponent.show();
+    filmsController.hide();
+    statisticsComponent.render();
+    statisticsComponentShowed = true;
+  }
+});
 
 const filterController = new FilterController(siteMenuComponent.getElement(), filmsModel);
 filterController.render();

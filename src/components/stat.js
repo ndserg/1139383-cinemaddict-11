@@ -10,4 +10,8 @@ export default class StatMenu extends AbstractComponent {
   getTemplate() {
     return createStatTemplate();
   }
+
+  setStatClickHandler(handler) {
+    this.getElement().addEventListener(`click`, handler);
+  }
 }
