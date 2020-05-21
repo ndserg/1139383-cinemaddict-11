@@ -1,5 +1,3 @@
-import moment from "moment";
-
 // Генератор случайного числа
 const getRandomNumber = (min, max) => {
   return (min + (Math.random() * (max - min))).toFixed(1);
@@ -33,11 +31,5 @@ const generateRandomDate = (start, end) => {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 };
 
-// Генератор случайной продолжительности в минутах
-const getRandomDuration = (min, max) => {
-  const time = getRandomIntegerNumber(min, max) * 60;
 
-  return moment.utc(time * 1000).format(`HH:mm`);
-};
-
-export {getRandomNumber, getRandomIntegerNumber, getRandomArrayItem, getRandomArray, generateRandomDate, getRandomDuration};
+export {getRandomNumber, getRandomIntegerNumber, getRandomArrayItem, getRandomArray, generateRandomDate};

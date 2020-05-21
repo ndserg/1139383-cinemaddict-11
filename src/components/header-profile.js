@@ -1,30 +1,8 @@
 // Шаблон Звания пользователя
 import AbstractComponent from "./abstract-component.js";
-import {getRandomIntegerNumber} from "../utils/common.js";
-import {PROFILE_RATING_VALUES} from "../const.js";
 
-const createHeaderProfileTemplate = () => {
-  const profileRatings = [`novice`, `fan`, `movie buff`];
-  const profileRatingCounter = getRandomIntegerNumber(0, 30);
-
-  const getProfileRating = (rating) => {
-    switch (rating) {
-
-      case (rating !== 0) && (rating <= PROFILE_RATING_VALUES[1]) ? rating : true:
-        return profileRatings[0];
-
-      case (rating > PROFILE_RATING_VALUES[1]) && (rating <= PROFILE_RATING_VALUES[2]) ? rating : true:
-        return profileRatings[1];
-
-      case rating > PROFILE_RATING_VALUES[2] ? rating : true:
-        return profileRatings[2];
-
-      default:
-        return ``;
-    }
-  };
-
-  const profileRating = getProfileRating(profileRatingCounter);
+const createHeaderProfileTemplate = (films) => {
+  const profileRating = films.getProfileRating();
 
   return (
     `<section class="header__profile profile">
@@ -35,7 +13,13 @@ const createHeaderProfileTemplate = () => {
 };
 
 export default class HeaderProfile extends AbstractComponent {
+  constructor(filmsModel) {
+    super();
+
+    this._filmsModel = filmsModel;
+  }
+
   getTemplate() {
-    return createHeaderProfileTemplate();
+    return createHeaderProfileTemplate(this._filmsModel);
   }
 }

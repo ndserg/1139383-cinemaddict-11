@@ -91,6 +91,7 @@ Sed sed nisi sed augue convallis suscipit in sed felis.
 Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. 
 In rutrum ac purus sit amet tempus.`;
 
+const PROFILE_RATINGS = [`novice`, `fan`, `movie buff`];
 const PROFILE_RATING_VALUES = [0, 10, 20];
 
 export {MONTHS,
@@ -103,7 +104,8 @@ export {MONTHS,
   COUNTRYES,
   PEOPLES,
   DESCRIPTION_TEXT,
-  PROFILE_RATING_VALUES
+  PROFILE_RATING_VALUES,
+  PROFILE_RATINGS
 };
 
 export const FilterType = {
@@ -111,4 +113,12 @@ export const FilterType = {
   WATCHLIST: `watchlist`,
   HISTORY: `history`,
   FAVORITES: `favorites`
+};
+
+export const StatisticsFilter = {
+  ALL_TIME: `all-time`,
+  TODAY: `today`,
+  WEEK: `week`,
+  MONTH: `month`,
+  YEAR: `year`,
 };

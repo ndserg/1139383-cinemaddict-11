@@ -3,7 +3,6 @@ import {getRandomIntegerNumber} from "../utils/common.js";
 import {getRandomArrayItem} from "../utils/common.js";
 import {getRandomArray} from "../utils/common.js";
 import {generateRandomDate} from "../utils/common.js";
-import {getRandomDuration} from "../utils/common.js";
 import {FILM_NAMES} from "../const.js";
 import {FILM_POSTERS} from "../const.js";
 import {FILM_GENRES} from "../const.js";
@@ -30,7 +29,7 @@ const generateFilm = () => {
     id: String(new Date() + Math.random()),
     name: getRandomArrayItem(FILM_NAMES),
     rating: getRandomNumber(0, 10),
-    duration: getRandomDuration(0, 240),
+    duration: getRandomIntegerNumber(0, 240),
     genre: getRandomArray(FILM_GENRES, getRandomIntegerNumber(1, FILM_GENRES.length)),
     poster: getRandomArrayItem(FILM_POSTERS),
     description: generateFilmDescription(),
@@ -41,6 +40,7 @@ const generateFilm = () => {
     releaseDate: generateRandomDate(new Date(2012, 0, 1), new Date(2020, 0, 1)),
     country: getRandomArrayItem(COUNTRYES),
     isInWatchlist: Math.random() > 0.5,
+    whatchingDate: generateRandomDate(new Date(2019, 9, 1), new Date(2020, 5, 21)),
     isInHistory: Math.random() > 0.5,
     isFavorite: Math.random() > 0.5,
     comments,

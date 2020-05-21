@@ -30,6 +30,8 @@ const createFilmInfoPopupMarkup = (film) => {
   } = film;
   const genresMarkup = genre.map((it) => createGenresMarkup(it)).join(`\n`);
   const filmDate = moment(releaseDate).format(`DD MMMM YYYY`);
+  const filmDuration = moment.utc(duration * 60 * 1000).format(`HH:mm`);
+
   return (
     `<div class="film-details__info-wrap">
       <div class="film-details__poster">
@@ -69,7 +71,7 @@ const createFilmInfoPopupMarkup = (film) => {
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Runtime</td>
-            <td class="film-details__cell">${duration}</td>
+            <td class="film-details__cell">${filmDuration}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Country</td>
