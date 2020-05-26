@@ -24,7 +24,7 @@ const createFilmCardTemplate = (film) => {
   } = film;
   const year = releaseDate.getFullYear();
   const descriptionText = prepareDescription(description);
-  const filmDuration = moment.utc(duration * 60 * 1000).format(`HH:mm`);
+  const filmDuration = moment.utc(duration * 60 * 1000).format(`HH[h] mm[m]`);
   const commentsCount = film.comments.length;
   const watchlistActiveClass = isInWatchlist ? ITEM_ACTIVE_CLASS : ``;
   const historyActiveClass = isInHistory ? ITEM_ACTIVE_CLASS : ``;

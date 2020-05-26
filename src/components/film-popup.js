@@ -33,7 +33,7 @@ const createFilmInfoPopupMarkup = (film) => {
   } = film;
   const genresMarkup = genre.map((it) => createGenresMarkup(it)).join(`\n`);
   const filmDate = moment(releaseDate).format(`DD MMMM YYYY`);
-  const filmDuration = moment.utc(duration * 60 * 1000).format(`HH:mm`);
+  const filmDuration = moment.utc(duration * 60 * 1000).format(`HH[h] mm[m]`);
   const watchlistActive = isInWatchlist ? `checked` : ``;
   const historyActive = isInHistory ? `checked` : ``;
   const favoriteActive = isFavorite ? `checked` : ``;
