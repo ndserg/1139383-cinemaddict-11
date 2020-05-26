@@ -94,6 +94,25 @@ In rutrum ac purus sit amet tempus.`;
 const PROFILE_RATINGS = [`novice`, `fan`, `movie buff`];
 const PROFILE_RATING_VALUES = [0, 10, 20];
 
+const FilterType = {
+  ALL: `all`,
+  WATCHLIST: `watchlist`,
+  HISTORY: `history`,
+  FAVORITES: `favorites`
+};
+
+const StatisticsFilter = {
+  ALL_TIME: `all-time`,
+  TODAY: `today`,
+  WEEK: `week`,
+  MONTH: `month`,
+  YEAR: `year`,
+};
+
+const AUTHORIZATION = `Basic sghjtyuyk5667457DSDSFfdfs`;
+
+const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict`;
+
 export {MONTHS,
   COMMENT_EMOJIS,
   COMMENT_TEXTS,
@@ -105,20 +124,10 @@ export {MONTHS,
   PEOPLES,
   DESCRIPTION_TEXT,
   PROFILE_RATING_VALUES,
-  PROFILE_RATINGS
+  PROFILE_RATINGS,
+  FilterType,
+  StatisticsFilter,
+  AUTHORIZATION,
+  END_POINT
 };
 
-export const FilterType = {
-  ALL: `all`,
-  WATCHLIST: `watchlist`,
-  HISTORY: `history`,
-  FAVORITES: `favorites`
-};
-
-export const StatisticsFilter = {
-  ALL_TIME: `all-time`,
-  TODAY: `today`,
-  WEEK: `week`,
-  MONTH: `month`,
-  YEAR: `year`,
-};

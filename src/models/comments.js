@@ -5,17 +5,25 @@ export default class CommentsModel {
     this._dataChangeHandlers = [];
   }
 
-  parseComments(commentsData) {
+  static parseComments(commentsData) {
     const parsedComments = commentsData.map((comment) => {
       return {
         id: comment[`id`],
-        emoji: comment[`emoji`],
-        text: comment[`comment`],
         author: comment[`author`],
+        comment: comment[`comment`],
         date: new Date(comment[`date`]),
+        emotion: comment[`emotion`],
       };
     });
     return parsedComments;
+  }
+
+  static commentToRaw(comment) {
+    return {
+      "comment": comment.comment,
+      "date": comment.date.toISOString(),
+      "emotion": comment.emotion
+    };
   }
 
   getComments() {

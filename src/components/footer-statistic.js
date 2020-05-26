@@ -1,7 +1,8 @@
 // Количество фильмов в базе (футер сайта)
 import AbstractComponent from "./abstract-component.js";
 
-const createFooterStatisticTemplate = (counter) => {
+const createFooterStatisticTemplate = (films) => {
+  const counter = films.getFilms().length;
 
   return (
     `<p>${counter} movies inside</p>`
@@ -9,13 +10,13 @@ const createFooterStatisticTemplate = (counter) => {
 };
 
 export default class FooterStatistic extends AbstractComponent {
-  constructor(counter) {
+  constructor(filmsModel) {
     super();
 
-    this._counter = counter;
+    this._filmsModel = filmsModel;
   }
 
   getTemplate() {
-    return createFooterStatisticTemplate(this._counter);
+    return createFooterStatisticTemplate(this._filmsModel);
   }
 }

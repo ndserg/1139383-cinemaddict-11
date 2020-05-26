@@ -43,9 +43,10 @@ const getSortedFilms = (films, sortType, from, to) => {
 };
 
 export default class FilmsController {
-  constructor(container, filmsModel) {
+  constructor(container, filmsModel, api) {
     this._container = container;
     this._filmsModel = filmsModel;
+    this._api = api;
 
     this._showedCardsControllers = [];
     this._showingCardsCount = SHOWING_CARDS_COUNT_ON_START;
@@ -160,6 +161,8 @@ export default class FilmsController {
 
   _renderShowMoreButton() {
     remove(this._cardsButtonShowMoreComponent);
+    remove(this._filmsExtraBlockTopComponent);
+    remove(this._filmsExtraBlockMostCommentedComponent);
 
     if (this._showingCardsCount >= this._filmsModel.getFilms().length) {
       return;
@@ -194,11 +197,15 @@ export default class FilmsController {
 
   // Обработка кликов на кнопках «Add to watchlist», «Already watched», «Add to favorites»
   _onDataChange(movieController, oldData, newData) {
-    const isSuccess = this._filmsModel.updateFilms(oldData.id, newData);
+    this._api.updateFilm(oldData.id, newData)
+    .then((loadedFilmData) => {
 
-    if (isSuccess) {
-      movieController.render(newData);
-    }
+      const isSuccess = this._filmsModel.updateFilms(oldData.id, loadedFilmData);
+
+      if (isSuccess) {
+        movieController.render(loadedFilmData);
+      }
+    });
   }
 
   _onViewChange() {

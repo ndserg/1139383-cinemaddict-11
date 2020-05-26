@@ -1,7 +1,10 @@
+import API from "../api.js";
 import FilmCardComponent from "../components/film-card.js";
 import FilmPopupComponent from "../components/film-popup.js";
+import FilmModel from "../models/film.js";
 import CommentsModel from "../models/comments.js";
 import {render, replace, remove, RenderPosition} from "../utils/render.js";
+import {AUTHORIZATION, END_POINT} from "../const.js";
 
 const siteBodyElement = document.querySelector(`body`);
 
@@ -30,15 +33,13 @@ export default class MovieController {
 
   render(film) {
     this._filmData = film;
-    this._commentsModel = new CommentsModel();
-    this._commentsModel.setComments(this._filmData.comments);
-    this._commentsData = this._commentsModel.getComments();
 
     // Рэндеринг карточек фильмов
     const oldFilmCardComponent = this._filmCardComponent;
     const oldFilmPopupComponent = this._filmPopupComponent;
 
-    this._filmCardComponent = new FilmCardComponent(this._filmData, this._commentsData);
+    this._filmCardComponent = new FilmCardComponent(this._filmData);
+
     this._filmPopupComponent = new FilmPopupComponent(this._filmData, this._commentsData, this._onCommentChange);
 
     if (this._filmPopupComponent) {
@@ -52,8 +53,21 @@ export default class MovieController {
 
     this._filmCardComponent.setDetailClickHandler(() => {
       this._onViewChange();
-      render(siteBodyElement, this._filmPopupComponent, RenderPosition.BEFOREEND);
-      this._filmPopupComponent.renderComments(this._commentsData);
+
+      const api = new API(END_POINT, AUTHORIZATION);
+      this._commentsModel = new CommentsModel();
+      this._commentsData = this._commentsModel.getComments();
+
+      api.getComments(this._filmData.id)
+      .then((comments) => {
+
+        this._commentsModel.setComments(comments);
+        this._commentsData = this._commentsModel.getComments();
+
+        render(siteBodyElement, this._filmPopupComponent, RenderPosition.BEFOREEND);
+        this._filmPopupComponent.renderComments(this._commentsData);
+      });
+
       document.addEventListener(`keydown`, this._onEscKeyDown);
       this._mode = Mode.OPEN_POPUP;
     });
@@ -63,45 +77,51 @@ export default class MovieController {
     // Обработка кликов на кнопках карточек фильмов «Add to watchlist», «Already watched», «Add to favorites»
     this._filmCardComponent.setWatchlistButtonClickHandler((evt) => {
       evt.preventDefault();
-      this._onDataChange(this, film, Object.assign({}, film, {
-        isInWatchlist: !film.isInWatchlist,
-      }));
+
+      const newFilm = FilmModel.clone(this._filmData);
+      newFilm.isInWatchlist = !newFilm.isInWatchlist;
+      this._onDataChange(this, this._filmData, newFilm);
     });
 
     this._filmCardComponent.setWatchedButtonClickHandler((evt) => {
       evt.preventDefault();
-      this._onDataChange(this, film, Object.assign({}, film, {
-        isInHistory: !film.isInHistory,
-      }));
+
+      const newFilm = FilmModel.clone(this._filmData);
+      newFilm.isInHistory = !newFilm.isInHistory;
+      this._onDataChange(this, this._filmData, newFilm);
     });
 
     this._filmCardComponent.setFavoriteButtonClickHandler((evt) => {
       evt.preventDefault();
-      this._onDataChange(this, film, Object.assign({}, film, {
-        isFavorite: !film.isFavorite,
-      }));
+
+      const newFilm = FilmModel.clone(this._filmData);
+      newFilm.isFavorite = !newFilm.isFavorite;
+      this._onDataChange(this, this._filmData, newFilm);
     });
 
     // Обработка кликов на кнопках попапа «Add to watchlist», «Already watched», «Add to favorites»
     this._filmPopupComponent.setWatchlistButtonClickHandler((evt) => {
       evt.preventDefault();
-      this._onDataChange(this, film, Object.assign({}, film, {
-        isInWatchlist: !film.isInWatchlist,
-      }));
+
+      const newFilm = FilmModel.clone(this._filmData);
+      newFilm.isInWatchlist = !newFilm.isInWatchlist;
+      this._onDataChange(this, this._filmData, newFilm);
     });
 
     this._filmPopupComponent.setWatchedButtonClickHandler((evt) => {
       evt.preventDefault();
-      this._onDataChange(this, film, Object.assign({}, film, {
-        isInHistory: !film.isInHistory,
-      }));
+
+      const newFilm = FilmModel.clone(this._filmData);
+      newFilm.isInHistory = !newFilm.isInHistory;
+      this._onDataChange(this, this._filmData, newFilm);
     });
 
     this._filmPopupComponent.setFavoriteButtonClickHandler((evt) => {
       evt.preventDefault();
-      this._onDataChange(this, film, Object.assign({}, film, {
-        isFavorite: !film.isFavorite,
-      }));
+
+      const newFilm = FilmModel.clone(this._filmData);
+      newFilm.isFavorite = !newFilm.isFavorite;
+      this._onDataChange(this, this._filmData, newFilm);
     });
 
     if (oldFilmCardComponent && oldFilmPopupComponent) {
@@ -119,16 +139,25 @@ export default class MovieController {
   }
 
   _onCommentChange(oldData, newData) {
-    let isSuccess = false;
+    const api = new API(END_POINT, AUTHORIZATION);
     if (newData === null) {
-      isSuccess = this._commentsModel.removeComment(oldData.id);
+      api.deleteComment(oldData.id)
+      .then(() => {
+        this._commentsModel.removeComment(oldData.id);
+        this._commentsData = this._commentsModel.getComments();
+        this._filmPopupComponent.renderComments(this._commentsData);
+        this._filmData.comments = this._filmData.comments.filter((comment) => comment !== oldData.id);
+        this.render(this._filmData);
+      });
     } else {
-      isSuccess = this._commentsModel.addComment(newData);
-    }
-
-    if (isSuccess) {
-      this._commentsData = this._commentsModel.getComments();
-      this._filmPopupComponent.renderComments(this._commentsData);
+      api.addComment(this._filmData, newData)
+      .then((loadedData) => {
+        this._filmData = loadedData.movie;
+        this._commentsModel.setComments(loadedData.comments);
+        this._commentsData = this._commentsModel.getComments();
+        this._filmPopupComponent.renderComments(this._commentsData);
+        this.render(this._filmData);
+      });
     }
   }
 
