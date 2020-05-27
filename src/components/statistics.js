@@ -9,7 +9,7 @@ const createStatisticsTemplate = (films, filter) => {
   const whatchedFilmsDuration = films.getWatchedFilms(filter).reduce((accumulator, film) => {
     return accumulator + film.duration;
   }, 0);
-  const topGenre = films.getTopGenre(filter);
+  const topGenre = watchedFilmsCount > 0 ? films.getTopGenre(filter) : ``;
   const userRating = films.getProfileRating(filter);
 
   const durationHours = (whatchedFilmsDuration - whatchedFilmsDuration % 60) / 60;

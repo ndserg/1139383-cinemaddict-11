@@ -6,6 +6,7 @@ import CommentsModel from "../models/comments.js";
 import {render, replace, remove, RenderPosition} from "../utils/render.js";
 import {AUTHORIZATION, END_POINT} from "../const.js";
 
+const SHAKE_ANIMATION_TIMEOUT = 600;
 const siteBodyElement = document.querySelector(`body`);
 
 const Mode = {
@@ -138,9 +139,15 @@ export default class MovieController {
     }
   }
 
-  _onCommentChange(oldData, newData) {
+  _onCommentChange(oldData, newData, commentComponent) {
     const api = new API(END_POINT, AUTHORIZATION);
+
     if (newData === null) {
+      commentComponent.getDeleteButton().disabled = true;
+      commentComponent.setData({
+        deleteButtonText: `Deleting...`,
+      });
+
       api.deleteComment(oldData.id)
       .then(() => {
         this._commentsModel.removeComment(oldData.id);
@@ -148,8 +155,15 @@ export default class MovieController {
         this._filmPopupComponent.renderComments(this._commentsData);
         this._filmData.comments = this._filmData.comments.filter((comment) => comment !== oldData.id);
         this.render(this._filmData);
+      })
+      .catch(() => {
+        this.shake(commentComponent);
+        commentComponent.getDeleteButton().disabled = false;
       });
     } else {
+      this._filmPopupComponent._getCommentInputElement().disabled = true;
+      this._filmPopupComponent._getCommentInputElement().style.outline = `none`;
+
       api.addComment(this._filmData, newData)
       .then((loadedData) => {
         this._filmData = loadedData.movie;
@@ -157,8 +171,28 @@ export default class MovieController {
         this._commentsData = this._commentsModel.getComments();
         this._filmPopupComponent.renderComments(this._commentsData);
         this.render(this._filmData);
+      })
+      .catch(() => {
+        this.shake(commentComponent);
+      })
+      .then(() => {
+        this._filmPopupComponent._getCommentInputElement().disabled = false;
       });
     }
+  }
+
+  shake(commentComponent) {
+    this._filmPopupComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    this._filmPopupComponent._getCommentInputElement().style.outline = `2px solid red`;
+
+    setTimeout(() => {
+      this._filmPopupComponent.getElement().style.animation = ``;
+      this._filmPopupComponent._getCommentInputElement().style.outline = `none`;
+
+      commentComponent.setData({
+        deleteButtonText: `Delete`,
+      });
+    }, SHAKE_ANIMATION_TIMEOUT);
   }
 
   destroy() {
