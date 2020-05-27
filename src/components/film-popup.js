@@ -26,11 +26,17 @@ const createFilmInfoPopupMarkup = (film) => {
     duration,
     country,
     genre,
-    description
+    description,
+    isInWatchlist,
+    isInHistory,
+    isFavorite
   } = film;
   const genresMarkup = genre.map((it) => createGenresMarkup(it)).join(`\n`);
   const filmDate = moment(releaseDate).format(`DD MMMM YYYY`);
-  const filmDuration = moment.utc(duration * 60 * 1000).format(`HH:mm`);
+  const filmDuration = moment.utc(duration * 60 * 1000).format(`HH[h] mm[m]`);
+  const watchlistActive = isInWatchlist ? `checked` : ``;
+  const historyActive = isInHistory ? `checked` : ``;
+  const favoriteActive = isFavorite ? `checked` : ``;
 
   return (
     `<div class="film-details__info-wrap">
@@ -92,13 +98,13 @@ const createFilmInfoPopupMarkup = (film) => {
     </div>
 
     <section class="film-details__controls">
-      <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+      <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${watchlistActive}>
       <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-      <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+      <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${historyActive}>
       <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-      <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+      <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${favoriteActive}>
       <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
     </section>`
   );
@@ -119,8 +125,7 @@ const createPopupEmojiListMarkup = (emojis) => {
     .join(`\n`);
 };
 
-const createFilmCommentsPopupMarkup = (film) => {
-  const {comments} = film;
+const createFilmCommentsPopupMarkup = (comments) => {
   const emojiList = createPopupEmojiListMarkup(COMMENT_EMOJIS);
 
   return (
@@ -186,7 +191,7 @@ export default class FilmPopup extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    return createFilmPopupTemplate(this._filmData);
+    return createFilmPopupTemplate(this._filmData, this._commentsData);
   }
 
   renderComments(commentsData) {
@@ -198,7 +203,7 @@ export default class FilmPopup extends AbstractSmartComponent {
       this._showedCommentsComponents.push(commentComponent);
       commentComponent.setDeleteCommentHandler((evt) => {
         evt.preventDefault();
-        this._onCommentChange(comment, null);
+        this._onCommentChange(comment, null, commentComponent);
       });
       render(this._getCommentsListElement(), commentComponent, RenderPosition.BEFOREEND);
     });
@@ -238,8 +243,8 @@ export default class FilmPopup extends AbstractSmartComponent {
       if (evt.key === `Enter` && this._activeEmoji) {
         this._onCommentChange(null, {
           id: String(new Date() + Math.random()),
-          emoji: this._activeEmoji,
-          text: encode(commentInput.value),
+          emotion: this._activeEmoji,
+          comment: encode(commentInput.value),
           author: `author`,
           date: new Date(),
         });

@@ -2,6 +2,8 @@
 import AbstractComponent from "./abstract-component.js";
 import moment from "moment";
 
+const ITEM_ACTIVE_CLASS = `film-card__controls-item--active`;
+
 const prepareDescription = (description) => {
   const DESCRIPTION_LENGTH = 139;
   return description.length <= DESCRIPTION_LENGTH ? description : description.substr(0, DESCRIPTION_LENGTH) + ` ...`;
@@ -16,11 +18,17 @@ const createFilmCardTemplate = (film) => {
     genre,
     poster,
     description,
-    commentsCount
+    isInWatchlist,
+    isInHistory,
+    isFavorite
   } = film;
   const year = releaseDate.getFullYear();
   const descriptionText = prepareDescription(description);
-  const filmDuration = moment.utc(duration * 60 * 1000).format(`HH:mm`);
+  const filmDuration = moment.utc(duration * 60 * 1000).format(`HH[h] mm[m]`);
+  const commentsCount = film.comments.length;
+  const watchlistActiveClass = isInWatchlist ? ITEM_ACTIVE_CLASS : ``;
+  const historyActiveClass = isInHistory ? ITEM_ACTIVE_CLASS : ``;
+  const favoriteActiveClass = isFavorite ? ITEM_ACTIVE_CLASS : ``;
 
   return (
     `<article class="film-card">
@@ -35,9 +43,9 @@ const createFilmCardTemplate = (film) => {
       <p class="film-card__description">${descriptionText}</p>
       <a class="film-card__comments">${commentsCount} comments</a>
       <form class="film-card__controls">
-        <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist">Add to watchlist</button>
-        <button class="film-card__controls-item button film-card__controls-item--mark-as-watched">Mark as watched</button>
-        <button class="film-card__controls-item button film-card__controls-item--favorite">Mark as favorite</button>
+        <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${watchlistActiveClass}">Add to watchlist</button>
+        <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${historyActiveClass}">Mark as watched</button>
+        <button class="film-card__controls-item button film-card__controls-item--favorite ${favoriteActiveClass}">Mark as favorite</button>
       </form>
     </article>`
   );
@@ -52,6 +60,10 @@ export default class FilmCard extends AbstractComponent {
 
   getTemplate() {
     return createFilmCardTemplate(this._film);
+  }
+
+  rerender() {
+    super.rerender();
   }
 
   setDetailClickHandler(handler) {
