@@ -1,8 +1,5 @@
 // Отрисовка элемента в DOM
-const RenderPosition = {
-  AFTERBEGIN: `afterbegin`,
-  BEFOREEND: `beforeend`
-};
+import {RenderPosition} from "../const.js";
 
 const createElement = (template) => {
   const newElement = document.createElement(`div`);

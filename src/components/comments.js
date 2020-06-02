@@ -1,9 +1,6 @@
 import AbstractComponent from "./abstract-component.js";
+import {DefaultData} from "../const.js";
 import moment from "moment";
-
-const DefaultData = {
-  deleteButtonText: `Delete`,
-};
 
 const createCommentTemplate = (comments, externalData) => {
   const {emotion, comment, author, date} = comments;

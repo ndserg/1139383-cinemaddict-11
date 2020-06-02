@@ -4,12 +4,14 @@ import CardsButtonShowMoreComponent from "../components/load-more-button.js";
 import MovieController from "./movie-controller.js";
 import FilmsExtraBlockComponent from "../components/films-extra.js";
 import NoFilmsComponent from "../components/no-films.js";
-import SortComponent, {SortType} from "../components/sort.js";
+import SortComponent from "../components/sort.js";
 import {render, remove, RenderPosition} from "../utils/render.js";
-
-const SHOWING_CARDS_COUNT_ON_START = 5;
-const SHOWING_CARDS_COUNT_BY_BUTTON = 5;
-const EXTRA_FILM_CARDS_COUNT = 2;
+import {
+  SortType,
+  SHOWING_CARDS_COUNT_ON_START,
+  SHOWING_CARDS_COUNT_BY_BUTTON,
+  EXTRA_FILM_CARDS_COUNT
+} from "../const.js";
 
 //  Сортировка карточек фильмов
 const renderFilms = (filmsContainerElement, films, onDataChange, onViewChange) => {

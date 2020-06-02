@@ -1,12 +1,6 @@
 import FilmModel from './models/film.js';
 import CommentsModel from "./models/comments.js";
-
-const Method = {
-  GET: `GET`,
-  POST: `POST`,
-  PUT: `PUT`,
-  DELETE: `DELETE`
-};
+import {Method} from "./const.js";
 
 const checkStatus = (response) => {
   if (response.status >= 200 && response.status < 300) {

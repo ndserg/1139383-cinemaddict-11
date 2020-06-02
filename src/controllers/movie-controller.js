@@ -4,15 +4,13 @@ import FilmPopupComponent from "../components/film-popup.js";
 import FilmModel from "../models/film.js";
 import CommentsModel from "../models/comments.js";
 import {render, replace, remove, RenderPosition} from "../utils/render.js";
-import {AUTHORIZATION, END_POINT} from "../const.js";
-
-const SHAKE_ANIMATION_TIMEOUT = 600;
-const siteBodyElement = document.querySelector(`body`);
-
-const Mode = {
-  DEFAULT: `default`,
-  OPEN_POPUP: `openPopup`,
-};
+import {
+  AUTHORIZATION,
+  END_POINT,
+  SHAKE_ANIMATION_TIMEOUT,
+  siteBodyElement,
+  Mode
+} from "../const.js";
 
 export default class MovieController {
   constructor(container, onDataChange, onViewChange) {
