@@ -1,4 +1,3 @@
-// Отрисовка элемента в DOM
 import {RenderPosition} from "../const.js";
 
 const createElement = (template) => {
