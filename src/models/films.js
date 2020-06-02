@@ -40,8 +40,8 @@ export default class Films {
         return watchedFilms;
     }
 
-    return watchedFilms.filter((item) => {
-      return item.whatchingDate > date;
+    return watchedFilms.filter((film) => {
+      return film.whatchingDate > date;
     });
   }
 

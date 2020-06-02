@@ -114,7 +114,8 @@ const createPopupEmojiListMarkup = (emojis) => {
 
   return emojis
     .map((emoji) => {
-      const isChecked = emoji;
+      const isChecked = false;
+
       return (
         `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emoji}" value="${emoji}" ${isChecked ? `checked` : ``}>
         <label class="film-details__emoji-label" for="emoji-${emoji}">
@@ -275,7 +276,8 @@ export default class FilmPopup extends AbstractSmartComponent {
     const emojiList = element.querySelectorAll(`.film-details__emoji-item`);
 
     emojiList.forEach(() => {
-      element.addEventListener(`click`, (evt) => {
+      element.addEventListener(`change`, (evt) => {
+
         this._activeEmoji = evt.target.value;
         if (COMMENT_EMOJIS.includes(this._activeEmoji)) {
           this._emojiInsert.innerHTML = `<img src="./images/emoji/${this._activeEmoji}.png" width="55" height="55" alt="emoji-${this._activeEmoji}">`;

@@ -28,12 +28,12 @@ export default class API {
     .then(CommentsModel.parseComments);
   }
 
-  updateFilm(id, data) {
+  updateFilm(id, film) {
     return this._load({
       url: `movies/${id}`,
       headers: new Headers({"Content-Type": `application/json`}),
       method: Method.PUT,
-      body: JSON.stringify(data.toRAW()),
+      body: JSON.stringify(film.toRAW()),
     })
     .then((response) => response.json())
     .then(FilmModel.parseFilm);

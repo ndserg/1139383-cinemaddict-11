@@ -1,11 +1,11 @@
 import AbstractComponent from "./abstract-component.js";
-import {DefaultData} from "../const.js";
+import {DefaultButtonText} from "../const.js";
 import moment from "moment";
 
-const createCommentTemplate = (comments, externalData) => {
+const createCommentTemplate = (comments, buttonText) => {
   const {emotion, comment, author, date} = comments;
   const commentDate = moment(date).format(`YYYY/MM/DD HH:mm`);
-  const deleteButtonText = externalData.deleteButtonText;
+  const deleteButtonText = buttonText.deleteButtonText;
 
   return (
     `<li class="film-details__comment">
@@ -29,19 +29,19 @@ export default class Comments extends AbstractComponent {
     super();
 
     this._comment = comment;
-    this._externalData = DefaultData;
+    this._buttonText = DefaultButtonText;
   }
 
   getTemplate() {
-    return createCommentTemplate(this._comment, this._externalData);
+    return createCommentTemplate(this._comment, this._buttonText);
   }
 
   getDeleteButton() {
     return this.getElement().querySelector(`.film-details__comment-delete`);
   }
 
-  setData(data) {
-    this._externalData = Object.assign({}, DefaultData, data);
+  setData(newText) {
+    this._buttonText = Object.assign({}, DefaultButtonText, newText);
   }
 
   setDeleteCommentHandler(handler) {

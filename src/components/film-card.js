@@ -73,7 +73,7 @@ export default class FilmCard extends AbstractComponent {
     const filmComments = this.getElement().querySelector(`.film-card__comments`);
 
     popupButtons.push(filmPoster, filmTitle, filmComments);
-    popupButtons.forEach((item) => item.addEventListener(`click`, handler));
+    popupButtons.forEach((button) => button.addEventListener(`click`, handler));
   }
 
   setWatchlistButtonClickHandler(handler) {

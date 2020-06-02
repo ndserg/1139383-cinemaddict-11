@@ -90,8 +90,7 @@ export default class FilmsController {
 
     render(container, this._sortComponent, RenderPosition.BEFOREEND);
 
-    this._renderFilmsList(films.slice(0, this._showingCardsCount));
-
+    this._renderFilmsList(films);
 
     // Вывод сообщения об отсутствии фильмов
     if (films.length === 0) {
@@ -122,9 +121,9 @@ export default class FilmsController {
     const container = this._container.getElement();
 
     const mostCommentedFilms = films
-    .filter((film) => film.commentsCount > 0)
+    .filter((film) => film.comments.length > 0)
     .sort((a, b) => {
-      return (b.commentsCount - a.commentsCount);
+      return (b.comments.length - a.comments.length);
     });
 
     if (mostCommentedFilms.length > 0) {
@@ -142,6 +141,7 @@ export default class FilmsController {
   }
 
   _renderFilmsList(films) {
+    const showedFilms = (films.slice(0, this._showingCardsCount));
     const container = this._container.getElement();
     const filmsListComponent = this._filmsListComponent.getElement();
     const filmsListCardsContainerComponent = this._filmsListCardsContainerComponent.getElement();
@@ -150,7 +150,7 @@ export default class FilmsController {
     render(filmsListComponent, this._filmsListCardsContainerComponent, RenderPosition.BEFOREEND);
     render(container, this._filmsListComponent, RenderPosition.BEFOREEND);
 
-    const newCards = renderFilms(filmsListCardsContainerComponent, films, this._onDataChange, this._onViewChange);
+    const newCards = renderFilms(filmsListCardsContainerComponent, showedFilms, this._onDataChange, this._onViewChange);
     this._showedCardsControllers = this._showedCardsControllers.concat(newCards);
 
     this._showingCardsCount = this._showedCardsControllers.length;
@@ -198,11 +198,11 @@ export default class FilmsController {
   }
 
   // Обработка кликов на кнопках «Add to watchlist», «Already watched», «Add to favorites»
-  _onDataChange(movieController, oldData, newData) {
-    this._api.updateFilm(oldData.id, newData)
+  _onDataChange(movieController, oldFilm, newFilm) {
+    this._api.updateFilm(oldFilm.id, newFilm)
     .then((loadedFilmData) => {
 
-      const isSuccess = this._filmsModel.updateFilms(oldData.id, loadedFilmData);
+      const isSuccess = this._filmsModel.updateFilms(oldFilm.id, loadedFilmData);
 
       if (isSuccess) {
         movieController.render(loadedFilmData);

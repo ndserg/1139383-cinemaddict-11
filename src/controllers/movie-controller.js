@@ -137,21 +137,21 @@ export default class MovieController {
     }
   }
 
-  _onCommentChange(oldData, newData, commentComponent) {
+  _onCommentChange(oldComment, newComment, commentComponent) {
     const api = new API(END_POINT, AUTHORIZATION);
 
-    if (newData === null) {
+    if (newComment === null) {
       commentComponent.getDeleteButton().disabled = true;
       commentComponent.setData({
         deleteButtonText: `Deleting...`,
       });
 
-      api.deleteComment(oldData.id)
+      api.deleteComment(oldComment.id)
       .then(() => {
-        this._commentsModel.removeComment(oldData.id);
+        this._commentsModel.removeComment(oldComment.id);
         this._commentsData = this._commentsModel.getComments();
         this._filmPopupComponent.renderComments(this._commentsData);
-        this._filmData.comments = this._filmData.comments.filter((comment) => comment !== oldData.id);
+        this._filmData.comments = this._filmData.comments.filter((comment) => comment !== oldComment.id);
         this.render(this._filmData);
       })
       .catch(() => {
@@ -162,7 +162,7 @@ export default class MovieController {
       this._filmPopupComponent._getCommentInputElement().disabled = true;
       this._filmPopupComponent._getCommentInputElement().style.outline = `none`;
 
-      api.addComment(this._filmData, newData)
+      api.addComment(this._filmData, newComment)
       .then((loadedData) => {
         this._filmData = loadedData.movie;
         this._commentsModel.setComments(loadedData.comments);
@@ -199,12 +199,10 @@ export default class MovieController {
     document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 
-  _removePopup(element) {
-    this._filmPopupComponent.removeElement(element);
+  _removePopup() {
     this._filmPopupComponent.resetForm();
     this._popupMode = Mode.DEFAULT;
     this._commentsModel.setComments(this._filmData.comments);
-    this._commentsData = this._commentsModel.getComments();
     remove(this._filmPopupComponent);
   }
 
