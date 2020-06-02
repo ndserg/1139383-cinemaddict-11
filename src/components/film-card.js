@@ -1,8 +1,7 @@
 // Шаблон Карточки Фильма
 import AbstractComponent from "./abstract-component.js";
+import {ITEM_ACTIVE_CLASS} from "../const.js";
 import moment from "moment";
-
-const ITEM_ACTIVE_CLASS = `film-card__controls-item--active`;
 
 const prepareDescription = (description) => {
   const DESCRIPTION_LENGTH = 139;
@@ -67,8 +66,14 @@ export default class FilmCard extends AbstractComponent {
   }
 
   setDetailClickHandler(handler) {
-    this.getElement().querySelector(`.film-card__poster`)
-    .addEventListener(`click`, handler);
+    const popupButtons = [];
+
+    const filmPoster = this.getElement().querySelector(`.film-card__poster`);
+    const filmTitle = this.getElement().querySelector(`.film-card__title`);
+    const filmComments = this.getElement().querySelector(`.film-card__comments`);
+
+    popupButtons.push(filmPoster, filmTitle, filmComments);
+    popupButtons.forEach((item) => item.addEventListener(`click`, handler));
   }
 
   setWatchlistButtonClickHandler(handler) {

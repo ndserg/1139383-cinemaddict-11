@@ -275,7 +275,7 @@ export default class FilmPopup extends AbstractSmartComponent {
     const emojiList = element.querySelectorAll(`.film-details__emoji-item`);
 
     emojiList.forEach(() => {
-      element.addEventListener(`change`, (evt) => {
+      element.addEventListener(`click`, (evt) => {
         this._activeEmoji = evt.target.value;
         if (COMMENT_EMOJIS.includes(this._activeEmoji)) {
           this._emojiInsert.innerHTML = `<img src="./images/emoji/${this._activeEmoji}.png" width="55" height="55" alt="emoji-${this._activeEmoji}">`;

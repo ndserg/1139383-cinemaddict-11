@@ -1,4 +1,3 @@
-// Сообщение об отсутствии фильмов
 import AbstractComponent from "./abstract-component.js";
 
 export default class AbstractSmartComponent extends AbstractComponent {

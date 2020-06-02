@@ -1,11 +1,6 @@
 // Шаблон сортировки
 import AbstractComponent from "./abstract-component.js";
-
-export const SortType = {
-  DATE: `date`,
-  RATING: `raiting`,
-  DEFAULT: `default`,
-};
+import {SortType} from "../const.js";
 
 const createFilterTemplate = () => {
   return (
