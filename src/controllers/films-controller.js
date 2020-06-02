@@ -198,11 +198,11 @@ export default class FilmsController {
   }
 
   // Обработка кликов на кнопках «Add to watchlist», «Already watched», «Add to favorites»
-  _onDataChange(movieController, oldFilmData, newFilmData) {
-    this._api.updateFilm(oldFilmData.id, newFilmData)
+  _onDataChange(movieController, oldFilm, newFilm) {
+    this._api.updateFilm(oldFilm.id, newFilm)
     .then((loadedFilmData) => {
 
-      const isSuccess = this._filmsModel.updateFilms(oldFilmData.id, loadedFilmData);
+      const isSuccess = this._filmsModel.updateFilms(oldFilm.id, loadedFilmData);
 
       if (isSuccess) {
         movieController.render(loadedFilmData);
