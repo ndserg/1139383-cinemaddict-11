@@ -15,7 +15,7 @@ export default class Films {
   }
 
   getWatchedFilms(period) {
-    let watchedFilms = getFilmsByFilter(this._films, FilterType.WATCHLIST);
+    const watchedFilms = getFilmsByFilter(this._films, FilterType.WATCHLIST);
 
     if (period === StatisticsFilter.ALL_TIME) {
       return watchedFilms;
@@ -69,7 +69,7 @@ export default class Films {
   }
 
   getGenreStatistics(filter) {
-    let genres = {};
+    const genres = {};
 
     this.getWatchedFilms(filter).forEach((film) => {
       Array.from(new Set(film.genre)).forEach((genre) => {
@@ -85,9 +85,9 @@ export default class Films {
   getSortedGenres(filter) {
     const genres = this.getGenreStatistics(filter);
 
-    let sortable = [];
+    const sortable = [];
 
-    for (let key in genres) {
+    for (const key in genres) {
       if (Object.prototype.hasOwnProperty.call(genres, key)) {
         sortable.push([key, genres[key]]);
       }
@@ -105,8 +105,8 @@ export default class Films {
       }
     });
 
-    let orderedList = {};
-    for (let idx in sortable) {
+    const orderedList = {};
+    for (const idx in sortable) {
       if (Object.prototype.hasOwnProperty.call(sortable, idx)) {
         orderedList[sortable[idx][0]] = sortable[idx][1];
       }
