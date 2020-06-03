@@ -1,11 +1,11 @@
 // Шаблон Карточки Фильма
 import AbstractComponent from "./abstract-component.js";
-import {ITEM_ACTIVE_CLASS} from "../const.js";
+import {ITEM_ACTIVE_CLASS, DESCRIPTION_LENGTH} from "../const.js";
 import moment from "moment";
 
 const prepareDescription = (description) => {
-  const DESCRIPTION_LENGTH = 139;
-  return description.length <= DESCRIPTION_LENGTH ? description : description.substr(0, DESCRIPTION_LENGTH) + ` ...`;
+
+  return description.length <= DESCRIPTION_LENGTH ? description : `${description.substr(0, DESCRIPTION_LENGTH)} ...`;
 };
 
 const createFilmCardTemplate = (film) => {

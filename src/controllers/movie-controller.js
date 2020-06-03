@@ -1,8 +1,9 @@
-import API from "../api.js";
+import API from "../api/index.js";
+import Provider from "../api/provider.js";
 import FilmCardComponent from "../components/film-card.js";
 import FilmPopupComponent from "../components/film-popup.js";
-import FilmModel from "../models/film.js";
-import CommentsModel from "../models/comments.js";
+import FilmModel from "../models/film-model.js";
+import CommentsModel from "../models/comments-model.js";
 import {render, replace, remove, RenderPosition} from "../utils/render.js";
 import {
   AUTHORIZATION,
@@ -54,10 +55,12 @@ export default class MovieController {
       this._onViewChange();
 
       const api = new API(END_POINT, AUTHORIZATION);
+      const apiWithProvider = new Provider(api);
+
       this._commentsModel = new CommentsModel();
       this._commentsData = this._commentsModel.getComments();
 
-      api.getComments(this._filmData.id)
+      apiWithProvider.getComments(this._filmData.id)
       .then((comments) => {
 
         this._commentsModel.setComments(comments);
@@ -139,14 +142,15 @@ export default class MovieController {
 
   _onCommentChange(oldComment, newComment, commentComponent) {
     const api = new API(END_POINT, AUTHORIZATION);
+    const apiWithProvider = new Provider(api);
 
     if (newComment === null) {
       commentComponent.getDeleteButton().disabled = true;
       commentComponent.setData({
-        deleteButtonText: `Deleting...`,
+        deleteText: `Deleting...`,
       });
 
-      api.deleteComment(oldComment.id)
+      apiWithProvider.deleteComment(oldComment.id)
       .then(() => {
         this._commentsModel.removeComment(oldComment.id);
         this._commentsData = this._commentsModel.getComments();
@@ -162,7 +166,7 @@ export default class MovieController {
       this._filmPopupComponent._getCommentInputElement().disabled = true;
       this._filmPopupComponent._getCommentInputElement().style.outline = `none`;
 
-      api.addComment(this._filmData, newComment)
+      apiWithProvider.addComment(this._filmData, newComment)
       .then((loadedData) => {
         this._filmData = loadedData.movie;
         this._commentsModel.setComments(loadedData.comments);
@@ -188,7 +192,7 @@ export default class MovieController {
       this._filmPopupComponent._getCommentInputElement().style.outline = `none`;
 
       commentComponent.setData({
-        deleteButtonText: `Delete`,
+        deleteText: `Delete`,
       });
     }, SHAKE_ANIMATION_TIMEOUT);
   }

@@ -1,7 +1,7 @@
 // Шаблон блока карточек фильмов
 import AbstractComponent from "./abstract-component.js";
 
-const createFilmsListCardsContainerTemplate = () => {
+const createFilmsListContainerTemplate = () => {
   return (
     `<div class="films-list__container"></div>`
   );
@@ -9,6 +9,6 @@ const createFilmsListCardsContainerTemplate = () => {
 
 export default class FilmsListContainer extends AbstractComponent {
   getTemplate() {
-    return createFilmsListCardsContainerTemplate();
+    return createFilmsListContainerTemplate();
   }
 }

@@ -27,3 +27,7 @@ export const getFilmsByFilter = (films, filterType) => {
 
   return films;
 };
+
+export const getFilterId = (filterType) => {
+  return Object.keys(FilterType).find((key) => FilterType[key] === filterType);
+};

@@ -2,7 +2,7 @@ import FilmsListComponent from "../components/films-list.js";
 import FilmsListCardsContainerComponent from "../components/films-list-container.js";
 import CardsButtonShowMoreComponent from "../components/load-more-button.js";
 import MovieController from "./movie-controller.js";
-import FilmsExtraBlockComponent from "../components/films-extra.js";
+import FilmsExtraBlockComponent from "../components/films-extra-block.js";
 import NoFilmsComponent from "../components/no-films.js";
 import SortComponent from "../components/sort.js";
 import {render, remove, RenderPosition} from "../utils/render.js";

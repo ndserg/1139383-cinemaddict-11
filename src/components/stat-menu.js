@@ -1,6 +1,6 @@
 import AbstractComponent from "./abstract-component.js";
 
-const createStatTemplate = () => {
+const createStatMenuTemplate = () => {
   return (
     `<a href="#stats" class="main-navigation__additional">Stats</a>`
   );
@@ -8,7 +8,7 @@ const createStatTemplate = () => {
 
 export default class StatMenu extends AbstractComponent {
   getTemplate() {
-    return createStatTemplate();
+    return createStatMenuTemplate();
   }
 
   setStatClickHandler(handler) {

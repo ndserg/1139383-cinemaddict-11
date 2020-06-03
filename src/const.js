@@ -1,13 +1,13 @@
-const PROFILE_RATINGS = [`novice`, `fan`, `movie buff`];
+const PROFILE_RATINGS = [`Novice`, `Fan`, `Movie Buff`];
 const PROFILE_RATING_VALUES = [0, 10, 20];
 
 const HIDDEN_CLASS = `visually-hidden`;
 
 const ITEM_ACTIVE_CLASS = `film-card__controls-item--active`;
 
-const FILTER_ID_PREFIX = `filter__`;
-
 const AUTHORIZATION = `Basic sghjtyuyk6197457DSDSFfdfs`;
+
+const DESCRIPTION_LENGTH = 139;
 
 const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict`;
 
@@ -41,7 +41,12 @@ const COMMENT_EMOJIS = [
 ];
 
 const DefaultButtonText = {
-  deleteButtonText: `Delete`
+  deleteText: `Delete`
+};
+
+const ResponseCode = {
+  SUCCESS: 200,
+  REDIRECT: 300
 };
 
 const Mode = {
@@ -62,10 +67,10 @@ const Method = {
 };
 
 const FilterType = {
-  ALL: `all`,
-  WATCHLIST: `watchlist`,
-  HISTORY: `history`,
-  FAVORITES: `favorites`
+  ALL: `All movies`,
+  WATCHLIST: `Watchlist`,
+  HISTORY: `History`,
+  FAVORITES: `Favorites`
 };
 
 const SortType = {
@@ -83,6 +88,8 @@ const StatisticsFilter = {
 };
 
 export {
+  ResponseCode,
+  DESCRIPTION_LENGTH,
   Method,
   RenderPosition,
   Mode,
@@ -91,7 +98,6 @@ export {
   SHOWING_CARDS_COUNT_ON_START,
   SHOWING_CARDS_COUNT_BY_BUTTON,
   EXTRA_FILM_CARDS_COUNT,
-  FILTER_ID_PREFIX,
   HIDDEN_CLASS,
   ITEM_ACTIVE_CLASS,
   DefaultButtonText,

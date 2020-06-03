@@ -5,7 +5,7 @@ import moment from "moment";
 const createCommentTemplate = (comments, buttonText) => {
   const {emotion, comment, author, date} = comments;
   const commentDate = moment(date).format(`YYYY/MM/DD HH:mm`);
-  const deleteButtonText = buttonText.deleteButtonText;
+  const deleteButtonText = buttonText.deleteText;
 
   return (
     `<li class="film-details__comment">

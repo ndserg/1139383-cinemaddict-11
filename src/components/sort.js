@@ -2,7 +2,7 @@
 import AbstractComponent from "./abstract-component.js";
 import {SortType} from "../const.js";
 
-const createFilterTemplate = () => {
+const createSortTemplate = () => {
   return (
     `<ul class="sort">
       <li><a href="#" class="sort__button sort__button--active" data-sort-type="${SortType.DEFAULT}">Sort by default</a></li>
@@ -20,7 +20,7 @@ export default class Sort extends AbstractComponent {
   }
 
   getTemplate() {
-    return createFilterTemplate();
+    return createSortTemplate();
   }
 
   getSortType() {

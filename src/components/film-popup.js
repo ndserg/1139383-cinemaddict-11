@@ -241,7 +241,7 @@ export default class FilmPopup extends AbstractSmartComponent {
       this._newCommentTextValue = encode(commentInput.value);
     });
     commentInput.addEventListener(`keydown`, (evt) => {
-      if (evt.ctrlKey && evt.key === `Enter` && this._activeEmoji) {
+      if (evt.key === `Enter` && (evt.ctrlKey || evt.metaKey) && this._activeEmoji) {
         this._onCommentChange(null, {
           id: String(new Date() + Math.random()),
           emotion: this._activeEmoji,

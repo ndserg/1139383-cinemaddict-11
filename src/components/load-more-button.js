@@ -1,7 +1,7 @@
 // Шаблон Кнопки "Показать Больше"
 import AbstractComponent from "./abstract-component.js";
 
-const createCardsButtonShowMoreTemplate = () => {
+const createLoadMoreButtonTemplate = () => {
   return (
     `<button class="films-list__show-more">Show more</button>`
   );
@@ -9,7 +9,7 @@ const createCardsButtonShowMoreTemplate = () => {
 
 export default class CardsButtonShowMore extends AbstractComponent {
   getTemplate() {
-    return createCardsButtonShowMoreTemplate();
+    return createLoadMoreButtonTemplate();
   }
 
   setClickHandler(handler) {

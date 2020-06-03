@@ -15,7 +15,7 @@ export default class Films {
   }
 
   getWatchedFilms(period) {
-    const watchedFilms = getFilmsByFilter(this._films, FilterType.WATCHLIST);
+    const watchedFilms = getFilmsByFilter(this._films, FilterType.HISTORY);
 
     if (period === StatisticsFilter.ALL_TIME) {
       return watchedFilms;
@@ -99,9 +99,8 @@ export default class Films {
       } else {
         if (a[1] > b[1]) {
           return 1;
-        } else {
-          return 0;
         }
+        return 0;
       }
     });
 
@@ -119,8 +118,8 @@ export default class Films {
     return Object.keys(this.getSortedGenres(filter))[0];
   }
 
-  getProfileRating(filter) {
-    const watchedFilmsCount = this.getWatchedFilms(filter).length;
+  getProfileRating() {
+    const watchedFilmsCount = this.getWatchedFilms().length;
 
     switch (watchedFilmsCount) {
 

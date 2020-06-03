@@ -1,13 +1,13 @@
-import FilmModel from './models/film.js';
-import CommentsModel from "./models/comments.js";
-import {Method} from "./const.js";
+import FilmModel from '../models/film-model.js';
+import CommentsModel from "../models/comments-model.js";
+import {Method, ResponseCode} from "../const.js";
 
 const checkStatus = (response) => {
-  if (response.status >= 200 && response.status < 300) {
+  if (response.status >= ResponseCode.SUCCESS && response.status < ResponseCode.REDIRECT) {
     return response;
-  } else {
-    throw new Error(`${response.status}: ${response.statusText}`);
   }
+
+  throw new Error(`${response.status}: ${response.statusText}`);
 };
 
 export default class API {
